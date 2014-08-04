@@ -8,6 +8,19 @@ I used the base project seen on http://www.instructables.com/id/Lets-cook-3D-sca
 If you want to use these programs, you will need the Arduino IDE (for compiling and uploading), and an Arduino Uno compatible devel board for the hardware.
 For the Processing program, you will need the Arduino up and running to execute the 3d-scanner. I set up the line_processor as a stand-alone. Just dump the sample images with the program and run it in Processing. It doesnt display content, but it does generate line drawings for each image, and generates a pointcloud file that MeshLab can read.
 
+Changes 4 August 2014:
+
+	Scrapped Java for QT5, C++ and OpenCV.
+	GUI mostly complete.
+	Multiple video sources will not open concurrently, yet...
+	Working on Calibration now.
+	Alpha code for handling Android running IP Webcam
+
+Changes 28 July 2014:
+
+     Still learning Java - Now have GUI and basic webcam viewing set up.
+     Looking at changing my Line and scanner sketch to display 3d point data instead. 
+
 
 Changes 20 July 2014:
 
