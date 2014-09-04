@@ -59,6 +59,16 @@ private slots:
 
     void on_vURL_returnPressed();
 
+    void on_width_editingFinished();
+
+    void on_height_editingFinished();
+
+    void on_sqSize_editingFinished();
+
+    void on_numOfFrames_editingFinished();
+
+    void on_frameDelay_editingFinished();
+
 private:
     Ui::configwindow *ui;
     void LoadSettings();

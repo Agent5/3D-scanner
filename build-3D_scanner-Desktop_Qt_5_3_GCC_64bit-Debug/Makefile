@@ -12,13 +12,13 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_WIDGETS_LIB -DQT_CONCURRENT_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIE $(DEFINES)
 CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIE $(DEFINES)
-INCPATH       = -I../../../Qt5.3.1/5.3/gcc_64/mkspecs/linux-g++ -I../3D_scanner -I../../../OpenCV/opencv/include/opencv -I../../../Qt5.3.1/5.3/gcc_64/include -I../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets -I../../../Qt5.3.1/5.3/gcc_64/include/QtGui -I../../../Qt5.3.1/5.3/gcc_64/include/QtCore -I. -I. -I.
+INCPATH       = -I../../../Qt5.3.1/5.3/gcc_64/mkspecs/linux-g++ -I../3D_scanner -I../../../OpenCV/opencv/include/opencv -I../../../Qt5.3.1/5.3/gcc_64/include -I../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets -I../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent -I../../../Qt5.3.1/5.3/gcc_64/include/QtGui -I../../../Qt5.3.1/5.3/gcc_64/include/QtCore -I. -I. -I.
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/josh/Qt5.3.1/5.3/gcc_64 -Wl,-rpath,/home/josh/Qt5.3.1/5.3/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_contrib -lopencv_legacy -lopencv_flann -L/home/josh/Qt5.3.1/5.3/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/usr/local/lib -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_contrib -lopencv_legacy -lopencv_flann -L/home/josh/Qt5.3.1/5.3/gcc_64/lib -lQt5Widgets -lQt5Concurrent -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 QMAKE         = /home/josh/Qt5.3.1/5.3/gcc_64/bin/qmake
@@ -311,7 +311,8 @@ Makefile: ../3D_scanner/3D_scanner.pro ../../../Qt5.3.1/5.3/gcc_64/mkspecs/linux
 		../3D_scanner/3D_scanner.pro \
 		/home/josh/Qt5.3.1/5.3/gcc_64/lib/libQt5Widgets.prl \
 		/home/josh/Qt5.3.1/5.3/gcc_64/lib/libQt5Gui.prl \
-		/home/josh/Qt5.3.1/5.3/gcc_64/lib/libQt5Core.prl
+		/home/josh/Qt5.3.1/5.3/gcc_64/lib/libQt5Core.prl \
+		/home/josh/Qt5.3.1/5.3/gcc_64/lib/libQt5Concurrent.prl
 	$(QMAKE) -spec linux-g++ CONFIG+=debug -o Makefile ../3D_scanner/3D_scanner.pro
 ../../../Qt5.3.1/5.3/gcc_64/mkspecs/features/spec_pre.prf:
 ../../../Qt5.3.1/5.3/gcc_64/mkspecs/common/shell-unix.conf:
@@ -424,6 +425,7 @@ Makefile: ../3D_scanner/3D_scanner.pro ../../../Qt5.3.1/5.3/gcc_64/mkspecs/linux
 /home/josh/Qt5.3.1/5.3/gcc_64/lib/libQt5Widgets.prl:
 /home/josh/Qt5.3.1/5.3/gcc_64/lib/libQt5Gui.prl:
 /home/josh/Qt5.3.1/5.3/gcc_64/lib/libQt5Core.prl:
+/home/josh/Qt5.3.1/5.3/gcc_64/lib/libQt5Concurrent.prl:
 qmake: FORCE
 	@$(QMAKE) -spec linux-g++ CONFIG+=debug -o Makefile ../3D_scanner/3D_scanner.pro
 
@@ -561,7 +563,7 @@ moc_mainwindow.cpp: ../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QMainWindow \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qicon.h \
 		../3D_scanner/mainwindow.h
-	/home/josh/Qt5.3.1/5.3/gcc_64/bin/moc $(DEFINES) -I/home/josh/Qt5.3.1/5.3/gcc_64/mkspecs/linux-g++ -I/home/josh/projects/3D-scanner/3D_scanner -I/home/josh/OpenCV/opencv/include/opencv -I/home/josh/Qt5.3.1/5.3/gcc_64/include -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtWidgets -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtGui -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtCore -I. ../3D_scanner/mainwindow.h -o moc_mainwindow.cpp
+	/home/josh/Qt5.3.1/5.3/gcc_64/bin/moc $(DEFINES) -I/home/josh/Qt5.3.1/5.3/gcc_64/mkspecs/linux-g++ -I/home/josh/projects/3D-scanner/3D_scanner -I/home/josh/OpenCV/opencv/include/opencv -I/home/josh/Qt5.3.1/5.3/gcc_64/include -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtWidgets -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtConcurrent -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtGui -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtCore -I. ../3D_scanner/mainwindow.h -o moc_mainwindow.cpp
 
 moc_configwindow.cpp: ../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QDialog \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qdialog.h \
@@ -775,7 +777,7 @@ moc_configwindow.cpp: ../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QDialog \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QDebug \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QSettings \
 		../3D_scanner/configwindow.h
-	/home/josh/Qt5.3.1/5.3/gcc_64/bin/moc $(DEFINES) -I/home/josh/Qt5.3.1/5.3/gcc_64/mkspecs/linux-g++ -I/home/josh/projects/3D-scanner/3D_scanner -I/home/josh/OpenCV/opencv/include/opencv -I/home/josh/Qt5.3.1/5.3/gcc_64/include -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtWidgets -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtGui -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtCore -I. ../3D_scanner/configwindow.h -o moc_configwindow.cpp
+	/home/josh/Qt5.3.1/5.3/gcc_64/bin/moc $(DEFINES) -I/home/josh/Qt5.3.1/5.3/gcc_64/mkspecs/linux-g++ -I/home/josh/projects/3D-scanner/3D_scanner -I/home/josh/OpenCV/opencv/include/opencv -I/home/josh/Qt5.3.1/5.3/gcc_64/include -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtWidgets -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtConcurrent -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtGui -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtCore -I. ../3D_scanner/configwindow.h -o moc_configwindow.cpp
 
 moc_camerawindow.cpp: ../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QDialog \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qdialog.h \
@@ -878,8 +880,116 @@ moc_camerawindow.cpp: ../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QDialog \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfiledevice.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qvector2d.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QtCore \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QtCoreDepends \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstractanimation.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qanimationgroup.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qparallelanimationgroup.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qpauseanimation.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qpropertyanimation.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qvariantanimation.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qeasingcurve.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsequentialanimationgroup.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtextcodec.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qendian.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlibraryinfo.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qbuffer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qdir.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfileinfo.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qdiriterator.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfileselector.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QObject \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QStringList \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfilesystemwatcher.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlockfile.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qloggingcategory.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qprocess.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qresource.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsavefile.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsettings.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstandardpaths.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtemporarydir.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QScopedPointer \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtemporaryfile.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstractproxymodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qidentityproxymodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qitemselectionmodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsortfilterproxymodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qjsonarray.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qjsondocument.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qjsonobject.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstracteventdispatcher.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qeventloop.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstractnativeeventfilter.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qbasictimer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmath.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmetaobject.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmimedata.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qobjectcleanuphandler.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qpointer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsharedmemory.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsignalmapper.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsocketnotifier.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsystemsemaphore.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtimer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtranslator.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qwineventnotifier.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmimedatabase.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmimetype.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfactoryinterface.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlibrary.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qplugin.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qpluginloader.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/quuid.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstractstate.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstracttransition.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qeventtransition.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfinalstate.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qhistorystate.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsignaltransition.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstate.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstatemachine.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qexception.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfuture.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfutureinterface.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qrunnable.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qresultstore.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfuturesynchronizer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfuturewatcher.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qreadwritelock.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsemaphore.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qthread.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qthreadpool.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qthreadstorage.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qwaitcondition.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qarraydataops.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qarraydatapointer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qbitarray.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qbytearraymatcher.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcache.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcollator.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcommandlineoption.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcommandlineparser.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qelapsedtimer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlinkedlist.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmessageauthenticationcode.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qqueue.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qregularexpression.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qscopedvaluerollback.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstack.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtextboundaryfinder.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtimeline.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtimezone.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtcoreversion.h \
 		../3D_scanner/camerawindow.h
-	/home/josh/Qt5.3.1/5.3/gcc_64/bin/moc $(DEFINES) -I/home/josh/Qt5.3.1/5.3/gcc_64/mkspecs/linux-g++ -I/home/josh/projects/3D-scanner/3D_scanner -I/home/josh/OpenCV/opencv/include/opencv -I/home/josh/Qt5.3.1/5.3/gcc_64/include -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtWidgets -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtGui -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtCore -I. ../3D_scanner/camerawindow.h -o moc_camerawindow.cpp
+	/home/josh/Qt5.3.1/5.3/gcc_64/bin/moc $(DEFINES) -I/home/josh/Qt5.3.1/5.3/gcc_64/mkspecs/linux-g++ -I/home/josh/projects/3D-scanner/3D_scanner -I/home/josh/OpenCV/opencv/include/opencv -I/home/josh/Qt5.3.1/5.3/gcc_64/include -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtWidgets -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtConcurrent -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtGui -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtCore -I. ../3D_scanner/camerawindow.h -o moc_camerawindow.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1268,7 +1378,8 @@ mainwindow.o: ../3D_scanner/mainwindow.cpp ../3D_scanner/mainwindow.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qxmlstream.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtcoreversion.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QDebug \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QSettings
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QSettings \
+		../3D_scanner/camerawindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../3D_scanner/mainwindow.cpp
 
 configwindow.o: ../3D_scanner/configwindow.cpp ../3D_scanner/configwindow.h \
@@ -1634,7 +1745,162 @@ camerawindow.o: ../3D_scanner/camerawindow.cpp ../3D_scanner/camerawindow.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfiledevice.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qvector2d.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qtouchdevice.h \
-		ui_camerawindow.h
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QtCore \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QtCoreDepends \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstractanimation.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qanimationgroup.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qparallelanimationgroup.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qpauseanimation.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qpropertyanimation.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qvariantanimation.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qeasingcurve.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsequentialanimationgroup.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtextcodec.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qendian.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlibraryinfo.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qbuffer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qdir.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfileinfo.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qdiriterator.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfileselector.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QObject \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QStringList \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfilesystemwatcher.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlockfile.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qloggingcategory.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qprocess.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qresource.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsavefile.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsettings.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstandardpaths.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtemporarydir.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QScopedPointer \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtemporaryfile.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstractproxymodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qidentityproxymodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qitemselectionmodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsortfilterproxymodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstringlistmodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qjsonarray.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qjsondocument.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qjsonobject.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstracteventdispatcher.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qeventloop.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstractnativeeventfilter.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qbasictimer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmath.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmetaobject.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmimedata.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qobjectcleanuphandler.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qpointer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsharedmemory.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsignalmapper.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsocketnotifier.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsystemsemaphore.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtimer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtranslator.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qwineventnotifier.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmimedatabase.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmimetype.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfactoryinterface.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlibrary.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qplugin.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qpluginloader.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/quuid.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstractstate.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstracttransition.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qeventtransition.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfinalstate.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qhistorystate.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsignaltransition.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstate.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstatemachine.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qexception.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfuture.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfutureinterface.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qrunnable.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qresultstore.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfuturesynchronizer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfuturewatcher.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qreadwritelock.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsemaphore.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qthread.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qthreadpool.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qthreadstorage.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qwaitcondition.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qarraydataops.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qarraydatapointer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qbitarray.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qbytearraymatcher.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcache.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcollator.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcommandlineoption.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcommandlineparser.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qelapsedtimer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlinkedlist.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmessageauthenticationcode.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qqueue.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qregularexpression.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qscopedvaluerollback.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstack.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtextboundaryfinder.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtimeline.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtimezone.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qxmlstream.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtcoreversion.h \
+		ui_camerawindow.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QVariant \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QAction \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qaction.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qicon.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qactiongroup.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QApplication \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qapplication.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qguiapplication.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qinputmethod.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QButtonGroup \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qbuttongroup.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QHeaderView \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qheaderview.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qframe.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qstyleoption.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qvalidator.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qslider.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qstyle.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qtabbar.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qrubberband.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QPushButton \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QVBoxLayout \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qboxlayout.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qlayout.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qlayoutitem.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qgridlayout.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QWidget \
+		../../../OpenCV/opencv/include/opencv/cv.h \
+		../../../OpenCV/opencv/include/opencv/highgui.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QSettings \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QDebug \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QThread \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentrun.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentcompilertest.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrent_global.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentrunbase.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentstoredfunctioncall.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QFuture
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o camerawindow.o ../3D_scanner/camerawindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 

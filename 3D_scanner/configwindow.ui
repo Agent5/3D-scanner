@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>574</width>
+    <width>672</width>
     <height>423</height>
    </rect>
   </property>
@@ -18,12 +18,12 @@
     <rect>
      <x>10</x>
      <y>20</y>
-     <width>551</width>
+     <width>651</width>
      <height>391</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>6</number>
    </property>
    <widget class="QWidget" name="tab1">
     <attribute name="title">
@@ -183,7 +183,7 @@
       <rect>
        <x>50</x>
        <y>50</y>
-       <width>101</width>
+       <width>111</width>
        <height>23</height>
       </rect>
      </property>
@@ -219,7 +219,7 @@
        <x>40</x>
        <y>20</y>
        <width>131</width>
-       <height>16</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="font">
@@ -293,7 +293,7 @@
        <x>40</x>
        <y>20</y>
        <width>131</width>
-       <height>16</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="font">
@@ -310,7 +310,7 @@
       <rect>
        <x>50</x>
        <y>50</y>
-       <width>101</width>
+       <width>111</width>
        <height>23</height>
       </rect>
      </property>
@@ -551,7 +551,7 @@
        <x>40</x>
        <y>20</y>
        <width>131</width>
-       <height>16</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="font">
@@ -568,7 +568,7 @@
       <rect>
        <x>50</x>
        <y>50</y>
-       <width>101</width>
+       <width>111</width>
        <height>23</height>
       </rect>
      </property>
@@ -809,7 +809,7 @@
        <x>40</x>
        <y>20</y>
        <width>131</width>
-       <height>16</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="font">
@@ -826,7 +826,7 @@
       <rect>
        <x>50</x>
        <y>50</y>
-       <width>101</width>
+       <width>111</width>
        <height>23</height>
       </rect>
      </property>
@@ -1264,7 +1264,7 @@
        <x>130</x>
        <y>20</y>
        <width>221</width>
-       <height>16</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="font">
@@ -1328,6 +1328,108 @@
        <string>/dev/ttyUSB3</string>
       </property>
      </item>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>Calibration</string>
+    </attribute>
+    <widget class="QLineEdit" name="width">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>30</y>
+       <width>113</width>
+       <height>23</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="height">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>60</y>
+       <width>113</width>
+       <height>23</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="sqSize">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>90</y>
+       <width>113</width>
+       <height>23</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="numOfFrames">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>120</y>
+       <width>113</width>
+       <height>23</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="frameDelay">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>150</y>
+       <width>113</width>
+       <height>23</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>30</y>
+       <width>209</width>
+       <height>141</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string> Number of inner corners: width</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>Number of inner corners: height</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>                              Square unit size</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>                         Number of Frames</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string>                                    Frame Delay</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
   </widget>

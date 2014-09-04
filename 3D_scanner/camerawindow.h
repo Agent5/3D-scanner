@@ -2,6 +2,8 @@
 #define CAMERAWINDOW_H
 
 #include <QDialog>
+#include <QtCore>
+
 
 namespace Ui {
 class camerawindow;
@@ -28,6 +30,8 @@ private slots:
 
 private:
     Ui::camerawindow *ui;
+    void ipcam();
+
 };
 
 #endif // CAMERAWINDOW_H

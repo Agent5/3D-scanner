@@ -85,15 +85,24 @@ public:
     QWidget *tab5;
     QLabel *label_4;
     QComboBox *comboBox_3;
+    QWidget *tab_2;
+    QLineEdit *width;
+    QLineEdit *height;
+    QLabel *label_10;
+    QLabel *label_15;
+    QLabel *label_16;
+    QLineEdit *sqSize;
+    QLabel *label_17;
+    QLineEdit *numOfFrames;
 
     void setupUi(QDialog *configwindow)
     {
         if (configwindow->objectName().isEmpty())
             configwindow->setObjectName(QStringLiteral("configwindow"));
-        configwindow->resize(574, 423);
+        configwindow->resize(672, 423);
         tabWidget = new QTabWidget(configwindow);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        tabWidget->setGeometry(QRect(10, 20, 551, 391));
+        tabWidget->setGeometry(QRect(10, 20, 651, 391));
         tab1 = new QWidget();
         tab1->setObjectName(QStringLiteral("tab1"));
         radioButton = new QRadioButton(tab1);
@@ -113,10 +122,10 @@ public:
         label_2->setFont(font);
         vDevice1 = new QComboBox(tab1);
         vDevice1->setObjectName(QStringLiteral("vDevice1"));
-        vDevice1->setGeometry(QRect(50, 50, 101, 23));
+        vDevice1->setGeometry(QRect(50, 50, 111, 23));
         label_3 = new QLabel(tab1);
         label_3->setObjectName(QStringLiteral("label_3"));
-        label_3->setGeometry(QRect(40, 20, 131, 16));
+        label_3->setGeometry(QRect(40, 20, 131, 21));
         label_3->setFont(font);
         vXAxis1 = new QLineEdit(tab1);
         vXAxis1->setObjectName(QStringLiteral("vXAxis1"));
@@ -136,11 +145,11 @@ public:
         tab2->setObjectName(QStringLiteral("tab2"));
         label_5 = new QLabel(tab2);
         label_5->setObjectName(QStringLiteral("label_5"));
-        label_5->setGeometry(QRect(40, 20, 131, 16));
+        label_5->setGeometry(QRect(40, 20, 131, 21));
         label_5->setFont(font);
         vDevice2 = new QComboBox(tab2);
         vDevice2->setObjectName(QStringLiteral("vDevice2"));
-        vDevice2->setGeometry(QRect(50, 50, 101, 23));
+        vDevice2->setGeometry(QRect(50, 50, 111, 23));
         label_6 = new QLabel(tab2);
         label_6->setObjectName(QStringLiteral("label_6"));
         label_6->setGeometry(QRect(50, 160, 111, 31));
@@ -172,11 +181,11 @@ public:
         tab3->setObjectName(QStringLiteral("tab3"));
         label_8 = new QLabel(tab3);
         label_8->setObjectName(QStringLiteral("label_8"));
-        label_8->setGeometry(QRect(40, 20, 131, 16));
+        label_8->setGeometry(QRect(40, 20, 131, 21));
         label_8->setFont(font);
         vDevice3 = new QComboBox(tab3);
         vDevice3->setObjectName(QStringLiteral("vDevice3"));
-        vDevice3->setGeometry(QRect(50, 50, 101, 23));
+        vDevice3->setGeometry(QRect(50, 50, 111, 23));
         label_9 = new QLabel(tab3);
         label_9->setObjectName(QStringLiteral("label_9"));
         label_9->setGeometry(QRect(50, 160, 111, 31));
@@ -208,11 +217,11 @@ public:
         tab4->setObjectName(QStringLiteral("tab4"));
         label_20 = new QLabel(tab4);
         label_20->setObjectName(QStringLiteral("label_20"));
-        label_20->setGeometry(QRect(40, 20, 131, 16));
+        label_20->setGeometry(QRect(40, 20, 131, 21));
         label_20->setFont(font);
         vDevice4 = new QComboBox(tab4);
         vDevice4->setObjectName(QStringLiteral("vDevice4"));
-        vDevice4->setGeometry(QRect(50, 50, 101, 23));
+        vDevice4->setGeometry(QRect(50, 50, 111, 23));
         label_21 = new QLabel(tab4);
         label_21->setObjectName(QStringLiteral("label_21"));
         label_21->setGeometry(QRect(50, 160, 111, 31));
@@ -270,7 +279,7 @@ public:
         vURL->setGeometry(QRect(50, 50, 381, 23));
         label = new QLabel(tab);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(130, 20, 221, 16));
+        label->setGeometry(QRect(130, 20, 221, 21));
         label->setFont(font);
         tabWidget->addTab(tab, QString());
         tab5 = new QWidget();
@@ -283,10 +292,37 @@ public:
         comboBox_3->setObjectName(QStringLiteral("comboBox_3"));
         comboBox_3->setGeometry(QRect(40, 50, 121, 23));
         tabWidget->addTab(tab5, QString());
+        tab_2 = new QWidget();
+        tab_2->setObjectName(QStringLiteral("tab_2"));
+        width = new QLineEdit(tab_2);
+        width->setObjectName(QStringLiteral("width"));
+        width->setGeometry(QRect(280, 30, 113, 23));
+        height = new QLineEdit(tab_2);
+        height->setObjectName(QStringLiteral("height"));
+        height->setGeometry(QRect(280, 60, 113, 23));
+        label_10 = new QLabel(tab_2);
+        label_10->setObjectName(QStringLiteral("label_10"));
+        label_10->setGeometry(QRect(70, 30, 191, 16));
+        label_15 = new QLabel(tab_2);
+        label_15->setObjectName(QStringLiteral("label_15"));
+        label_15->setGeometry(QRect(50, 60, 211, 20));
+        label_16 = new QLabel(tab_2);
+        label_16->setObjectName(QStringLiteral("label_16"));
+        label_16->setGeometry(QRect(160, 90, 101, 16));
+        sqSize = new QLineEdit(tab_2);
+        sqSize->setObjectName(QStringLiteral("sqSize"));
+        sqSize->setGeometry(QRect(280, 90, 113, 23));
+        label_17 = new QLabel(tab_2);
+        label_17->setObjectName(QStringLiteral("label_17"));
+        label_17->setGeometry(QRect(140, 120, 131, 20));
+        numOfFrames = new QLineEdit(tab_2);
+        numOfFrames->setObjectName(QStringLiteral("numOfFrames"));
+        numOfFrames->setGeometry(QRect(280, 120, 113, 23));
+        tabWidget->addTab(tab_2, QString());
 
         retranslateUi(configwindow);
 
-        tabWidget->setCurrentIndex(4);
+        tabWidget->setCurrentIndex(6);
 
 
         QMetaObject::connectSlotsByName(configwindow);
@@ -480,6 +516,11 @@ public:
          << QApplication::translate("configwindow", "/dev/ttyUSB3", 0)
         );
         tabWidget->setTabText(tabWidget->indexOf(tab5), QApplication::translate("configwindow", "Serial", 0));
+        label_10->setText(QApplication::translate("configwindow", "Number of inner corners: width", 0));
+        label_15->setText(QApplication::translate("configwindow", "Number of inner corners: height", 0));
+        label_16->setText(QApplication::translate("configwindow", "Square unit size", 0));
+        label_17->setText(QApplication::translate("configwindow", "Number of Frames", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("configwindow", "Calibration", 0));
     } // retranslateUi
 
 };

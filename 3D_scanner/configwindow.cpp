@@ -230,3 +230,33 @@ void configwindow::on_vURL_returnPressed()
     QString url = ui->vURL->text();
     configwindow::SaveSettings( "Video", "vURL", url );
 }
+
+void configwindow::on_width_editingFinished()
+{
+    QString x = ui->width->text();
+    configwindow::SaveSettings( "Calibration", "X", x );
+}
+
+void configwindow::on_height_editingFinished()
+{
+    QString y = ui->height->text();
+    configwindow::SaveSettings( "Calibration", "Y", y );
+}
+
+void configwindow::on_sqSize_editingFinished()
+{
+    QString square = ui->sqSize->text();
+    configwindow::SaveSettings( "Calibration", "Square_size", square );
+}
+
+void configwindow::on_numOfFrames_editingFinished()
+{
+    QString frameNum = ui->numOfFrames->text();
+    configwindow::SaveSettings( "Calibration", "numOfFrames", frameNum );
+}
+
+void configwindow::on_frameDelay_editingFinished()
+{
+    QString frameMS = ui->frameDelay->text();
+    configwindow::SaveSettings( "Calibration", "frameDelay", frameMS );
+}
