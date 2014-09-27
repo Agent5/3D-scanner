@@ -25,7 +25,7 @@ private slots:
     void on_viewCameraButton_clicked();
 
     void on_calibrateButton_clicked();
-    
+
 private:
     Ui::MainWindow *ui;
 };

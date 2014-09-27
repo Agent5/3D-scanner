@@ -15,11 +15,14 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -88,18 +91,26 @@ public:
     QWidget *tab_2;
     QLineEdit *width;
     QLineEdit *height;
+    QLineEdit *sqSize;
+    QLineEdit *numOfFrames;
+    QLineEdit *frameDelay;
+    QWidget *layoutWidget;
+    QVBoxLayout *verticalLayout;
     QLabel *label_10;
     QLabel *label_15;
     QLabel *label_16;
-    QLineEdit *sqSize;
     QLabel *label_17;
-    QLineEdit *numOfFrames;
+    QLabel *label_18;
+    QWidget *widget;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *FileSave;
+    QLineEdit *fileSaveLocation;
 
     void setupUi(QDialog *configwindow)
     {
         if (configwindow->objectName().isEmpty())
             configwindow->setObjectName(QStringLiteral("configwindow"));
-        configwindow->resize(672, 423);
+        configwindow->resize(672, 424);
         tabWidget = new QTabWidget(configwindow);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
         tabWidget->setGeometry(QRect(10, 20, 651, 391));
@@ -300,29 +311,67 @@ public:
         height = new QLineEdit(tab_2);
         height->setObjectName(QStringLiteral("height"));
         height->setGeometry(QRect(280, 60, 113, 23));
-        label_10 = new QLabel(tab_2);
-        label_10->setObjectName(QStringLiteral("label_10"));
-        label_10->setGeometry(QRect(70, 30, 191, 16));
-        label_15 = new QLabel(tab_2);
-        label_15->setObjectName(QStringLiteral("label_15"));
-        label_15->setGeometry(QRect(50, 60, 211, 20));
-        label_16 = new QLabel(tab_2);
-        label_16->setObjectName(QStringLiteral("label_16"));
-        label_16->setGeometry(QRect(160, 90, 101, 16));
         sqSize = new QLineEdit(tab_2);
         sqSize->setObjectName(QStringLiteral("sqSize"));
         sqSize->setGeometry(QRect(280, 90, 113, 23));
-        label_17 = new QLabel(tab_2);
-        label_17->setObjectName(QStringLiteral("label_17"));
-        label_17->setGeometry(QRect(140, 120, 131, 20));
         numOfFrames = new QLineEdit(tab_2);
         numOfFrames->setObjectName(QStringLiteral("numOfFrames"));
         numOfFrames->setGeometry(QRect(280, 120, 113, 23));
+        frameDelay = new QLineEdit(tab_2);
+        frameDelay->setObjectName(QStringLiteral("frameDelay"));
+        frameDelay->setGeometry(QRect(280, 150, 113, 23));
+        layoutWidget = new QWidget(tab_2);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(50, 30, 209, 141));
+        verticalLayout = new QVBoxLayout(layoutWidget);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        label_10 = new QLabel(layoutWidget);
+        label_10->setObjectName(QStringLiteral("label_10"));
+
+        verticalLayout->addWidget(label_10);
+
+        label_15 = new QLabel(layoutWidget);
+        label_15->setObjectName(QStringLiteral("label_15"));
+
+        verticalLayout->addWidget(label_15);
+
+        label_16 = new QLabel(layoutWidget);
+        label_16->setObjectName(QStringLiteral("label_16"));
+
+        verticalLayout->addWidget(label_16);
+
+        label_17 = new QLabel(layoutWidget);
+        label_17->setObjectName(QStringLiteral("label_17"));
+
+        verticalLayout->addWidget(label_17);
+
+        label_18 = new QLabel(layoutWidget);
+        label_18->setObjectName(QStringLiteral("label_18"));
+
+        verticalLayout->addWidget(label_18);
+
+        widget = new QWidget(tab_2);
+        widget->setObjectName(QStringLiteral("widget"));
+        widget->setGeometry(QRect(50, 180, 581, 31));
+        horizontalLayout = new QHBoxLayout(widget);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        FileSave = new QPushButton(widget);
+        FileSave->setObjectName(QStringLiteral("FileSave"));
+
+        horizontalLayout->addWidget(FileSave);
+
+        fileSaveLocation = new QLineEdit(widget);
+        fileSaveLocation->setObjectName(QStringLiteral("fileSaveLocation"));
+
+        horizontalLayout->addWidget(fileSaveLocation);
+
         tabWidget->addTab(tab_2, QString());
 
         retranslateUi(configwindow);
 
-        tabWidget->setCurrentIndex(6);
+        tabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(configwindow);
@@ -516,10 +565,12 @@ public:
          << QApplication::translate("configwindow", "/dev/ttyUSB3", 0)
         );
         tabWidget->setTabText(tabWidget->indexOf(tab5), QApplication::translate("configwindow", "Serial", 0));
-        label_10->setText(QApplication::translate("configwindow", "Number of inner corners: width", 0));
+        label_10->setText(QApplication::translate("configwindow", " Number of inner corners: width", 0));
         label_15->setText(QApplication::translate("configwindow", "Number of inner corners: height", 0));
-        label_16->setText(QApplication::translate("configwindow", "Square unit size", 0));
-        label_17->setText(QApplication::translate("configwindow", "Number of Frames", 0));
+        label_16->setText(QApplication::translate("configwindow", "                              Square unit size", 0));
+        label_17->setText(QApplication::translate("configwindow", "                         Number of Frames", 0));
+        label_18->setText(QApplication::translate("configwindow", "                                    Frame Delay", 0));
+        FileSave->setText(QApplication::translate("configwindow", "File Location", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("configwindow", "Calibration", 0));
     } // retranslateUi
 

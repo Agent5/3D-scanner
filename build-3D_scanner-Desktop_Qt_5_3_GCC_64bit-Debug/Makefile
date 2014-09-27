@@ -48,16 +48,20 @@ OBJECTS_DIR   = ./
 SOURCES       = ../3D_scanner/main.cpp \
 		../3D_scanner/mainwindow.cpp \
 		../3D_scanner/configwindow.cpp \
-		../3D_scanner/camerawindow.cpp moc_mainwindow.cpp \
+		../3D_scanner/camerawindow.cpp \
+		../3D_scanner/calibratewindow.cpp moc_mainwindow.cpp \
 		moc_configwindow.cpp \
-		moc_camerawindow.cpp
+		moc_camerawindow.cpp \
+		moc_calibratewindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		configwindow.o \
 		camerawindow.o \
+		calibratewindow.o \
 		moc_mainwindow.o \
 		moc_configwindow.o \
-		moc_camerawindow.o
+		moc_camerawindow.o \
+		moc_calibratewindow.o
 DIST          = ../../../Qt5.3.1/5.3/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt5.3.1/5.3/gcc_64/mkspecs/common/shell-unix.conf \
 		../../../Qt5.3.1/5.3/gcc_64/mkspecs/common/unix.conf \
@@ -168,7 +172,8 @@ DIST          = ../../../Qt5.3.1/5.3/gcc_64/mkspecs/features/spec_pre.prf \
 		../3D_scanner/3D_scanner.pro ../3D_scanner/main.cpp \
 		../3D_scanner/mainwindow.cpp \
 		../3D_scanner/configwindow.cpp \
-		../3D_scanner/camerawindow.cpp
+		../3D_scanner/camerawindow.cpp \
+		../3D_scanner/calibratewindow.cpp
 QMAKE_TARGET  = 3D_scanner
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = 3D_scanner
@@ -198,7 +203,7 @@ first: all
 
 all: Makefile $(TARGET)
 
-$(TARGET): ui_mainwindow.h ui_configwindow.h ui_camerawindow.h $(OBJECTS)  
+$(TARGET): ui_mainwindow.h ui_configwindow.h ui_camerawindow.h ui_calibratewindow.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../3D_scanner/3D_scanner.pro ../../../Qt5.3.1/5.3/gcc_64/mkspecs/linux-g++/qmake.conf ../../../Qt5.3.1/5.3/gcc_64/mkspecs/features/spec_pre.prf \
@@ -433,7 +438,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/3D_scanner1.0.0 || mkdir -p .tmp/3D_scanner1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/3D_scanner1.0.0/ && $(COPY_FILE) --parents ../3D_scanner/mainwindow.h ../3D_scanner/settings.h ../3D_scanner/configwindow.h ../3D_scanner/camerawindow.h .tmp/3D_scanner1.0.0/ && $(COPY_FILE) --parents ../3D_scanner/main.cpp ../3D_scanner/mainwindow.cpp ../3D_scanner/configwindow.cpp ../3D_scanner/camerawindow.cpp .tmp/3D_scanner1.0.0/ && $(COPY_FILE) --parents ../3D_scanner/mainwindow.ui ../3D_scanner/configwindow.ui ../3D_scanner/camerawindow.ui .tmp/3D_scanner1.0.0/ && (cd `dirname .tmp/3D_scanner1.0.0` && $(TAR) 3D_scanner1.0.0.tar 3D_scanner1.0.0 && $(COMPRESS) 3D_scanner1.0.0.tar) && $(MOVE) `dirname .tmp/3D_scanner1.0.0`/3D_scanner1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/3D_scanner1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/3D_scanner1.0.0/ && $(COPY_FILE) --parents ../3D_scanner/mainwindow.h ../3D_scanner/settings.h ../3D_scanner/configwindow.h ../3D_scanner/camerawindow.h ../3D_scanner/calibratewindow.h .tmp/3D_scanner1.0.0/ && $(COPY_FILE) --parents ../3D_scanner/main.cpp ../3D_scanner/mainwindow.cpp ../3D_scanner/configwindow.cpp ../3D_scanner/camerawindow.cpp ../3D_scanner/calibratewindow.cpp .tmp/3D_scanner1.0.0/ && $(COPY_FILE) --parents ../3D_scanner/mainwindow.ui ../3D_scanner/configwindow.ui ../3D_scanner/camerawindow.ui ../3D_scanner/calibratewindow.ui .tmp/3D_scanner1.0.0/ && (cd `dirname .tmp/3D_scanner1.0.0` && $(TAR) 3D_scanner1.0.0.tar 3D_scanner1.0.0 && $(COMPRESS) 3D_scanner1.0.0.tar) && $(MOVE) `dirname .tmp/3D_scanner1.0.0`/3D_scanner1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/3D_scanner1.0.0
 
 
 clean:compiler_clean 
@@ -456,9 +461,9 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_configwindow.cpp moc_camerawindow.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_configwindow.cpp moc_camerawindow.cpp moc_calibratewindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_configwindow.cpp moc_camerawindow.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_configwindow.cpp moc_camerawindow.cpp moc_calibratewindow.cpp
 moc_mainwindow.cpp: ../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QMainWindow \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qwidget.h \
@@ -991,11 +996,115 @@ moc_camerawindow.cpp: ../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QDialog \
 		../3D_scanner/camerawindow.h
 	/home/josh/Qt5.3.1/5.3/gcc_64/bin/moc $(DEFINES) -I/home/josh/Qt5.3.1/5.3/gcc_64/mkspecs/linux-g++ -I/home/josh/projects/3D-scanner/3D_scanner -I/home/josh/OpenCV/opencv/include/opencv -I/home/josh/Qt5.3.1/5.3/gcc_64/include -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtWidgets -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtConcurrent -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtGui -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtCore -I. ../3D_scanner/camerawindow.h -o moc_camerawindow.cpp
 
+moc_calibratewindow.cpp: ../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qdialog.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qwidget.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qflags.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_mips.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qobject.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstring.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qchar.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlist.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qisenum.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qrect.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsize.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qpalette.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qcolor.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qrgb.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qpair.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qbrush.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qvector.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qmatrix.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qregion.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qline.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qtransform.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qpainterpath.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qimage.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qpixmap.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qhash.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qfont.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qfontinfo.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qcursor.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qevent.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qvariant.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmap.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qdebug.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlocale.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qset.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qurl.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfile.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qtouchdevice.h \
+		../3D_scanner/calibratewindow.h
+	/home/josh/Qt5.3.1/5.3/gcc_64/bin/moc $(DEFINES) -I/home/josh/Qt5.3.1/5.3/gcc_64/mkspecs/linux-g++ -I/home/josh/projects/3D-scanner/3D_scanner -I/home/josh/OpenCV/opencv/include/opencv -I/home/josh/Qt5.3.1/5.3/gcc_64/include -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtWidgets -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtConcurrent -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtGui -I/home/josh/Qt5.3.1/5.3/gcc_64/include/QtCore -I. ../3D_scanner/calibratewindow.h -o moc_calibratewindow.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h ui_configwindow.h ui_camerawindow.h
+compiler_uic_make_all: ui_mainwindow.h ui_configwindow.h ui_camerawindow.h ui_calibratewindow.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h ui_configwindow.h ui_camerawindow.h
+	-$(DEL_FILE) ui_mainwindow.h ui_configwindow.h ui_camerawindow.h ui_calibratewindow.h
 ui_mainwindow.h: ../3D_scanner/mainwindow.ui
 	/home/josh/Qt5.3.1/5.3/gcc_64/bin/uic ../3D_scanner/mainwindow.ui -o ui_mainwindow.h
 
@@ -1004,6 +1113,9 @@ ui_configwindow.h: ../3D_scanner/configwindow.ui
 
 ui_camerawindow.h: ../3D_scanner/camerawindow.ui
 	/home/josh/Qt5.3.1/5.3/gcc_64/bin/uic ../3D_scanner/camerawindow.ui -o ui_camerawindow.h
+
+ui_calibratewindow.h: ../3D_scanner/calibratewindow.ui
+	/home/josh/Qt5.3.1/5.3/gcc_64/bin/uic ../3D_scanner/calibratewindow.ui -o ui_calibratewindow.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -1379,7 +1491,10 @@ mainwindow.o: ../3D_scanner/mainwindow.cpp ../3D_scanner/mainwindow.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtcoreversion.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QDebug \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QSettings \
-		../3D_scanner/camerawindow.h
+		../3D_scanner/camerawindow.h \
+		../3D_scanner/calibratewindow.h \
+		../../../OpenCV/opencv/include/opencv/cv.h \
+		../../../OpenCV/opencv/include/opencv/highgui.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../3D_scanner/mainwindow.cpp
 
 configwindow.o: ../3D_scanner/configwindow.cpp ../3D_scanner/configwindow.h \
@@ -1620,6 +1735,11 @@ configwindow.o: ../3D_scanner/configwindow.cpp ../3D_scanner/configwindow.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qrubberband.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qframe.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QHBoxLayout \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qboxlayout.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qlayout.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qlayoutitem.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qgridlayout.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QHeaderView \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qheaderview.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
@@ -1632,15 +1752,22 @@ configwindow.o: ../3D_scanner/configwindow.cpp ../3D_scanner/configwindow.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qtextformat.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qpen.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qtextoption.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QPushButton \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QRadioButton \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qradiobutton.h \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QTabWidget \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QVBoxLayout \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QWidget \
 		../3D_scanner/mainwindow.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QMainWindow \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qmainwindow.h \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QProcess
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QProcess \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QFileDialog \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qfiledialog.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/QDesktopServices \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qdesktopservices.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o configwindow.o ../3D_scanner/configwindow.cpp
 
 camerawindow.o: ../3D_scanner/camerawindow.cpp ../3D_scanner/camerawindow.h \
@@ -1866,6 +1993,9 @@ camerawindow.o: ../3D_scanner/camerawindow.cpp ../3D_scanner/camerawindow.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qinputmethod.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QButtonGroup \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qbuttongroup.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QCheckBox \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qcheckbox.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QHeaderView \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qheaderview.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
@@ -1883,7 +2013,6 @@ camerawindow.o: ../3D_scanner/camerawindow.cpp ../3D_scanner/camerawindow.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qrubberband.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QPushButton \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qpushbutton.h \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QVBoxLayout \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qboxlayout.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qlayout.h \
@@ -1894,14 +2023,174 @@ camerawindow.o: ../3D_scanner/camerawindow.cpp ../3D_scanner/camerawindow.h \
 		../../../OpenCV/opencv/include/opencv/highgui.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QSettings \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QDebug \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QThread \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentrun.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QFuture \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/QtConcurrent \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/QtConcurrentDepends \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentcompilertest.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrent_global.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentexception.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentfilter.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentfilterkernel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentiteratekernel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentmedian.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentthreadengine.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentmapkernel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentreducekernel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentfunctionwrappers.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentmap.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentrun.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentrunbase.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentstoredfunctioncall.h \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QFuture
+		../../../Qt5.3.1/5.3/gcc_64/include/QtConcurrent/qtconcurrentversion.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o camerawindow.o ../3D_scanner/camerawindow.cpp
+
+calibratewindow.o: ../3D_scanner/calibratewindow.cpp ../3D_scanner/calibratewindow.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qdialog.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qwidget.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qflags.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_mips.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qobject.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstring.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qchar.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlist.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qisenum.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qobject_impl.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qrect.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsize.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qpalette.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qcolor.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qrgb.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qiodevice.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qpair.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qbrush.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qvector.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qmatrix.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qpolygon.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qregion.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qline.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qtransform.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qpainterpath.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qimage.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qpixmap.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qshareddata.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qhash.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qfont.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qfontinfo.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qcursor.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qkeysequence.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qevent.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qvariant.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qmap.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qdebug.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qtextstream.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qlocale.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qset.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qurl.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qurlquery.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfile.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qvector2d.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qtouchdevice.h \
+		ui_calibratewindow.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QVariant \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QAction \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qaction.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qicon.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qactiongroup.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QApplication \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qapplication.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qcoreapplication.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qeventloop.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qguiapplication.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qinputmethod.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QButtonGroup \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qbuttongroup.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QHeaderView \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qheaderview.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractitemview.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qframe.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qitemselectionmodel.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qstyleoption.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtGui/qvalidator.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qregularexpression.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qslider.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractslider.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qstyle.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qtabbar.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qtabwidget.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qrubberband.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QPushButton \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QVBoxLayout \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qboxlayout.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qlayout.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qlayoutitem.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qgridlayout.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QWidget \
+		../../../OpenCV/opencv/include/opencv/cv.h \
+		../../../OpenCV/opencv/include/opencv/highgui.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o calibratewindow.o ../3D_scanner/calibratewindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
@@ -1911,6 +2200,9 @@ moc_configwindow.o: moc_configwindow.cpp
 
 moc_camerawindow.o: moc_camerawindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_camerawindow.o moc_camerawindow.cpp
+
+moc_calibratewindow.o: moc_calibratewindow.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_calibratewindow.o moc_calibratewindow.cpp
 
 ####### Install
 

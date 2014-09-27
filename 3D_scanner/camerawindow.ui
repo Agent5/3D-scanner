@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>139</width>
-    <height>202</height>
+    <width>246</width>
+    <height>187</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>109</width>
-     <height>145</height>
+     <width>124</width>
+     <height>165</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -63,6 +63,53 @@
      <widget class="QPushButton" name="pushButton_5">
       <property name="text">
        <string>Show IP camera</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>10</y>
+     <width>90</width>
+     <height>171</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_4">
+    <item>
+     <widget class="QCheckBox" name="calib1">
+      <property name="text">
+       <string>Calibrate</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="calib2">
+      <property name="text">
+       <string>Calibrate</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="calib3">
+      <property name="text">
+       <string>Calibrate</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="calib4">
+      <property name="text">
+       <string>Calibrate</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="calib5">
+      <property name="text">
+       <string>Calibrate</string>
       </property>
      </widget>
     </item>

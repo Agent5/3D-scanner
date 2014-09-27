@@ -69,9 +69,12 @@ private slots:
 
     void on_frameDelay_editingFinished();
 
+    void on_FileSave_clicked();
+
+
 private:
     Ui::configwindow *ui;
-    void LoadSettings();
+//    void LoadSettings(void);
     void SaveSettings(QString, QString, QString);
 };
 

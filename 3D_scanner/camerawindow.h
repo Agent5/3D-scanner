@@ -28,6 +28,8 @@ private slots:
 
     void on_pushButton_5_clicked();
 
+    void on_calib1_clicked(bool checked);
+
 private:
     Ui::camerawindow *ui;
     void ipcam();

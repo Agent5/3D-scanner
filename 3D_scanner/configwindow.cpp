@@ -2,12 +2,17 @@
 #include "ui_configwindow.h"
 #include "mainwindow.h"
 #include <QProcess>
+#include <QFileDialog>
+#include <QDesktopServices>
+#include <QLineEdit>
 
 configwindow::configwindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::configwindow)
 {
     ui->setupUi(this);
+
+
 }
 
 configwindow::~configwindow()
@@ -128,10 +133,39 @@ settings.endGroup();
 
 
 
-void configwindow::LoadSettings()
-{
 
-};
+//void configwindow::LoadSettings(void)
+//{
+//    QSettings settings("JoshCrawleySoft", "3D_Scanner");
+//    QString a1 = (settings.value("Video/vDevice1" , -1)).toString();
+//    int vidDevice1 = a1.right(1).toInt();
+//    ui->vXAxis1->text() = settings.value("Video/vXAxis1").toString();
+//    ui->vYAxis1->text() = settings.value("Video/vYAxis1").toString();
+//    ui->radioButton_2->setChecked(true);
+//    ui->vDevice1->setCurrentIndex(vidDevice1);
+//
+//    QString a2 = (settings.value("Video/vDevice2" , -1)).toString();
+//    int vidDevice2 = a2.right(1).toInt();
+//    ui->vXAxis2->text() = settings.value("Video/vXAxis2").toString();
+//    ui->vYAxis2->text() = settings.value("Video/vYAxis2").toString();
+//    ui->radioButton_4->setChecked(true);
+//    ui->vDevice2->setCurrentIndex(vidDevice2);
+//
+//    QString a3 = (settings.value("Video/vDevice3" , -1)).toString();
+//    int vidDevice3 = a3.right(1).toInt();
+//    ui->vXAxis3->text() = settings.value("Video/vXAxis3").toString();
+//    ui->vYAxis3->text() = settings.value("Video/vYAxis3").toString();
+//    ui->radioButton_6->setChecked(true);
+//    ui->vDevice3->setCurrentIndex(vidDevice3);
+//
+//    QString a4 = (settings.value("Video/vDevice4" , -1)).toString();
+//    int vidDevice4 = a4.right(1).toInt();
+//    ui->vXAxis4->text() = settings.value("Video/vXAxis4").toString();
+//    ui->vYAxis4->text() = settings.value("Video/vYAxis4").toString();
+//    ui->radioButton_14->setChecked(true);
+//    ui->vDevice4->setCurrentIndex(vidDevice4);
+//
+//};
 
 
 
@@ -260,3 +294,15 @@ void configwindow::on_frameDelay_editingFinished()
     QString frameMS = ui->frameDelay->text();
     configwindow::SaveSettings( "Calibration", "frameDelay", frameMS );
 }
+
+void configwindow::on_FileSave_clicked()
+{
+    QString directoryName = QFileDialog::getExistingDirectory(this, tr("Save Location"),
+                                        "/home",
+                                        QFileDialog::ShowDirsOnly
+                                        | QFileDialog::DontResolveSymlinks);
+    ui->fileSaveLocation->setText(directoryName);
+    configwindow::SaveSettings( "Calibration", "fileStorage", directoryName );
+
+}
+
