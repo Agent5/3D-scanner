@@ -1,6 +1,27 @@
 3D-scanner
 ==========
 
+Current - 29 September 2014
+
+QT program nearly functional for scanning!
+What is done?
+	GUI done.	
+	Basic configuration.
+	Camera lens calibration!
+	
+In the works (actively)?
+	Laser line detection
+	Ellipse detection (Yes, both of these will auto-calibrate the camera)
+	Scanner.
+	Algo's to increase accuracy and pointcloud generation.
+
+Slightly future Goals?
+	Implement more than flat text file for data saving. Looking at .OBJ
+
+
+
+Previously...
+
 Cheap 3D scanner based on Arduino and Processing
 
 I used the base project seen on http://www.instructables.com/id/Lets-cook-3D-scanner-based-on-Arduino-and-Proces/?&sort=ACTIVE&limit=40&offset=40#DISCUSS

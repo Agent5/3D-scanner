@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QLineEdit>
+#include <QDebug>
 
 configwindow::configwindow(QWidget *parent) :
     QDialog(parent),
@@ -12,6 +13,53 @@ configwindow::configwindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QSettings settings("JoshCrawleySoft", "3D_Scanner");
+
+    ui->vXAxis1->setPlaceholderText( (settings.value("Video/vXAxis1").toString() ) );
+    ui->vYAxis1->setPlaceholderText( (settings.value("Video/vYAxis1").toString() ) );
+    QString a1 = (settings.value("Video/vDevice1" , "-1")).toString();
+    int vidDevice1 = a1.right(1).toInt();
+    if (a1.length() != 0) {
+        ui->vDevice1->setCurrentIndex(vidDevice1 + 1);
+    }
+
+    ui->vXAxis2->setPlaceholderText( (settings.value("Video/vXAxis2").toString() ) );
+    ui->vYAxis2->setPlaceholderText( (settings.value("Video/vYAxis2").toString() ) );
+    QString a2 = (settings.value("Video/vDevice2" , "-1")).toString();
+    int vidDevice2 = a2.right(1).toInt();
+    if (a2.length() != 0) {
+        ui->vDevice2->setCurrentIndex(vidDevice2 + 1);
+    }
+
+
+    ui->vXAxis3->setPlaceholderText( (settings.value("Video/vXAxis3").toString() ) );
+    ui->vYAxis3->setPlaceholderText( (settings.value("Video/vYAxis3").toString() ) );
+    QString a3 = (settings.value("Video/vDevice3" , "-1")).toString();
+    int vidDevice3 = a3.right(1).toInt();
+    if (a3.length() != 0) {
+        ui->vDevice3->setCurrentIndex(vidDevice3 + 1);
+    }
+
+
+    ui->vXAxis4->setPlaceholderText( (settings.value("Video/vXAxis4").toString() ) );
+    ui->vYAxis4->setPlaceholderText( (settings.value("Video/vYAxis4").toString() ) );
+    QString a4 = (settings.value("Video/vDevice4" , "-1")).toString();
+    int vidDevice4 = a4.right(1).toInt();
+    if (a4.length() != 0) {
+        ui->vDevice4->setCurrentIndex(vidDevice4 + 1);
+    }
+
+    ui->vURL->setPlaceholderText( (settings.value("Video/vURL").toString() ) );
+    ui->vXAxis5->setPlaceholderText( (settings.value("Video/vXAxis5").toString() ) );
+    ui->vYAxis5->setPlaceholderText( (settings.value("Video/vYAxis5").toString() ) );
+
+
+    ui->fileSaveLocation->setPlaceholderText( settings.value("Calibration/fileStorage").toString() );
+    ui->width->setPlaceholderText( (settings.value("Calibration/X")).toString() );
+    ui->height->setPlaceholderText( (settings.value("Calibration/Y")).toString() );
+    ui->sqSize->setPlaceholderText( settings.value("Calibration/Square_size").toString() );
+    ui->numOfFrames->setPlaceholderText( (settings.value("Calibration/numOfFrames")).toString() );
+    ui->frameDelay->setPlaceholderText((settings.value("Calibration/frameDelay")).toString() );
 
 }
 

@@ -2182,14 +2182,11 @@ calibratewindow.o: ../3D_scanner/calibratewindow.cpp ../3D_scanner/calibratewind
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QPushButton \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qabstractbutton.h \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QVBoxLayout \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qboxlayout.h \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qlayout.h \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qlayoutitem.h \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qgridlayout.h \
-		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QWidget \
 		../../../OpenCV/opencv/include/opencv/cv.h \
-		../../../OpenCV/opencv/include/opencv/highgui.h
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/QSettings \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtCore/qsettings.h \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/QMessageBox \
+		../../../Qt5.3.1/5.3/gcc_64/include/QtWidgets/qmessagebox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o calibratewindow.o ../3D_scanner/calibratewindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 

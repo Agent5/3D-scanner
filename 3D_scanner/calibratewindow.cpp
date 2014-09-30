@@ -1,8 +1,11 @@
 #include "calibratewindow.h"
 #include "ui_calibratewindow.h"
 #include <cv.h>
-#include <highgui.h>
 #include <QSettings>
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include <QMessageBox>
+#include <QDebug>
 
 calibratewindow::calibratewindow(QWidget *parent) :
     QDialog(parent),
@@ -15,6 +18,10 @@ calibratewindow::~calibratewindow()
 {
     delete ui;
 }
+
+
+
+
 
 void calibratewindow::on_calibButton1_clicked()
 {
@@ -145,8 +152,99 @@ void calibratewindow::on_calibButton1_clicked()
     cvSave( intrinsicName, intrinsic_matrix );
     cvSave( distortionName, distortion_coeffs );
     cvDestroyWindow( "Calibration" );
+    //cvReleaseCapture(&capture);
+    //return;
+    //Normally ended here, but we now do line detection...
+
+    QMessageBox msgBox;
+    msgBox.setText("Lens Calibration done. Please remove checkerboard from scan.");
+    msgBox.exec();
+    
+    cv::Mat threshold_output, src_gray;
+    std::vector<std::vector<cv::Point> > contours;
+    std::vector<cv::Vec4i> hierarchy;
+    int thresh = 100;
+    cv::namedWindow( "Contours", CV_WINDOW_AUTOSIZE );
+    cv::RNG rng(12345);
+
+    do{
+        cv::Mat src = cvQueryFrame( capture );
+        cv::cvtColor(src, src_gray, CV_BGR2GRAY);
+        
+        /// Detect edges using Threshold
+        cv::threshold( src_gray, threshold_output, thresh, 255, cv::THRESH_TOZERO );
+        /// Find contours
+        cv::findContours( threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_TC89_KCOS, cv::Point(0, 0) );
+
+        /// Find the rotated rectangles and ellipses for each contour
+        std::vector<cv::RotatedRect> minRect( contours.size() );
+        std::vector<cv::RotatedRect> minEllipse( contours.size() );
+        for( int i = 0; i < contours.size(); i++ )
+        { minRect[i] = minAreaRect( cv::Mat(contours[i]) );
+            if( contours[i].size() > 5 )
+            { minEllipse[i] = fitEllipse( cv::Mat(contours[i]) ); }
+        }
+        
+        /// Draw contours + rotated rects + ellipses
+        cv::Mat drawing = cv::Mat::zeros( threshold_output.size(), CV_8UC3 );
+        for( int i = 0; i< contours.size(); i++ )
+        {
+            cv::Scalar color = cv::Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+            // contour
+            cv::drawContours( drawing, contours, i, color, 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point() );
+            // ellipse
+            cv::ellipse( drawing, minEllipse[i], color, 2, 8 );
+            // rotated rectangle
+            cv::Point2f rect_points[4]; minRect[i].points( rect_points );
+            for( int j = 0; j < 4; j++ )
+                cv::line( drawing, rect_points[j], rect_points[(j+1)%4], color, 1, 8 );
+        }
+        cv::createTrackbar( "Circle threshhold:", "Contours", &thresh, 255 );
+        imshow( "Contours", drawing );
+    }while(cv::waitKey(30)<0);
+    cv::destroyWindow("Contours");
+    
+    
+
+    cv::namedWindow( "Detected Lines" );
+
+    cv::Mat dst, cdst;
+    cv::Mat src = cvQueryFrame( capture );
+    
+    int canny_thresh_min = 0;
+    int canny_thresh_max = 400;
+    do{
+        src = cvQueryFrame( capture );
+        cv::blur(src, src, cv::Size(3,3));
+        cv::Canny(src, dst, canny_thresh_min, canny_thresh_max, 3);
+        cv::cvtColor(dst, cdst, CV_GRAY2BGR);
+
+
+        std::vector<cv::Vec4i> lines;
+        cv::HoughLinesP(dst, lines, 1, CV_PI/180, 50, 50, 10 );
+        for( size_t i = 0; i < lines.size(); i++ )
+        {
+            cv::Vec4i l = lines[i];
+            line( cdst, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 3, CV_AA);
+        }
+        cv::imshow("Detected Lines", cdst);
+        cv::createTrackbar( "Canny threshhold:", "Detected Lines", &canny_thresh_min, canny_thresh_max );
+    } while(cv::waitKey(30)<0);
+    
+    
+    cv::destroyWindow("Detected Lines");
+    cvReleaseCapture(&capture);
     return;
+
+
+
 }
+
+
+
+
+
+
 
 
 void calibratewindow::on_calibButton2_clicked()
@@ -278,8 +376,42 @@ void calibratewindow::on_calibButton2_clicked()
     cvSave( intrinsicName, intrinsic_matrix );
     cvSave( distortionName, distortion_coeffs );
     cvDestroyWindow( "Calibration" );
+    //cvReleaseCapture(&capture);
+    //return;
+    //Normally ended here, but we now do line detection...
+
+
+    QMessageBox msgBox;
+    msgBox.setText("Lens Calibration done. Please remove checkerboard from scan.");
+    msgBox.exec();
+
+    cv::namedWindow( "Detected Lines" );
+
+    cv::Mat dst, cdst;
+
+    do{
+        cv::Mat src = cvQueryFrame( capture );
+        cv::Canny(src, dst, 50, 200, 3);
+        cv::cvtColor(dst, cdst, CV_GRAY2BGR);
+
+        std::vector<cv::Vec4i> lines;
+        cv::HoughLinesP(dst, lines, 1, CV_PI/180, 50, 50, 10 );
+        for( size_t i = 0; i < lines.size(); i++ )
+        {
+            cv::Vec4i l = lines[i];
+            line( cdst, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 3, CV_AA);
+        }
+        cv::imshow("Detected Lines", cdst);
+    } while(cv::waitKey(30)<0);
+    cv::destroyWindow("Detected Lines");
+    cvReleaseCapture(&capture);
     return;
 }
+
+
+
+
+
 
 
 void calibratewindow::on_calibButton3_clicked()
@@ -411,9 +543,42 @@ void calibratewindow::on_calibButton3_clicked()
     cvSave( intrinsicName, intrinsic_matrix );
     cvSave( distortionName, distortion_coeffs );
     cvDestroyWindow( "Calibration" );
-    return;
+    //cvReleaseCapture(&capture);
+    //return;
+    //Normally ended here, but we now do line detection...
 
+    QMessageBox msgBox;
+    msgBox.setText("Lens Calibration done. Please remove checkerboard from scan.");
+    msgBox.exec();
+
+    cv::namedWindow( "Detected Lines" );
+
+    cv::Mat dst, cdst;
+
+    do{
+        cv::Mat src = cvQueryFrame( capture );
+        cv::Canny(src, dst, 50, 200, 3);
+        cv::cvtColor(dst, cdst, CV_GRAY2BGR);
+
+        std::vector<cv::Vec4i> lines;
+        cv::HoughLinesP(dst, lines, 1, CV_PI/180, 50, 50, 10 );
+        for( size_t i = 0; i < lines.size(); i++ )
+        {
+            cv::Vec4i l = lines[i];
+            line( cdst, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 3, CV_AA);
+        }
+        cv::imshow("Detected Lines", cdst);
+    } while(cv::waitKey(30)<0);
+    cv::destroyWindow("Detected Lines");
+    cvReleaseCapture(&capture);
+    return;
 }
+
+
+
+
+
+
 
 
 void calibratewindow::on_calibButton4_clicked()
@@ -545,6 +710,34 @@ void calibratewindow::on_calibButton4_clicked()
     cvSave( intrinsicName, intrinsic_matrix );
     cvSave( distortionName, distortion_coeffs );
     cvDestroyWindow( "Calibration" );
+    //cvReleaseCapture(&capture);
+    //return;
+    //Normally ended here, but we now do line detection...
+
+    QMessageBox msgBox;
+    msgBox.setText("Lens Calibration done. Please remove checkerboard from scan.");
+    msgBox.exec();
+
+    cv::namedWindow( "Detected Lines" );
+
+    cv::Mat dst, cdst;
+
+    do{
+        cv::Mat src = cvQueryFrame( capture );
+        cv::Canny(src, dst, 50, 200, 3);
+        cv::cvtColor(dst, cdst, CV_GRAY2BGR);
+
+        std::vector<cv::Vec4i> lines;
+        cv::HoughLinesP(dst, lines, 1, CV_PI/180, 50, 50, 10 );
+        for( size_t i = 0; i < lines.size(); i++ )
+        {
+            cv::Vec4i l = lines[i];
+            line( cdst, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 3, CV_AA);
+        }
+        cv::imshow("Detected Lines", cdst);
+    } while(cv::waitKey(30)<0);
+    cv::destroyWindow("Detected Lines");
+    cvReleaseCapture(&capture);
     return;
 
 //    // Example of loading these matrices back in

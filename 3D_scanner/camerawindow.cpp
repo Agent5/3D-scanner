@@ -58,7 +58,25 @@ void camerawindow::on_pushButton_clicked()
             IplImage *temp = cvCloneImage( frame1 );
             cvRemap( temp, frame1, mapx, mapy );
             cvReleaseImage( &temp );
-            cvShowImage( "Calibrated VidWindow 1", frame1 );
+
+            cv::Mat old;
+
+            cv::Mat channel[3];
+            cv::split(frame1, channel);
+            if(ui->cam1B->isChecked() == true) {
+                channel[0]=cv::Mat::zeros(frame1->height, frame1->width, CV_8UC1); //BLUE!!!!!!
+            }
+            if(ui->cam1G->isChecked() == true) {
+                channel[1]=cv::Mat::zeros(frame1->height, frame1->width, CV_8UC1); //GREEN!!!!!!
+            }
+            if(ui->cam1R->isChecked() == true) {
+                channel[2]=cv::Mat::zeros(frame1->height, frame1->width, CV_8UC1); //RED!!!!!!
+            }
+            cv::merge(channel, 3, old);
+            IplImage newer = old;
+            IplImage* new_image = &newer;
+
+            cvShowImage( "Calibrated VidWindow 1", new_image );
             int c = cvWaitKey( 15 );
             if( c == 'p' ){
                         c = 0;
@@ -80,8 +98,20 @@ void camerawindow::on_pushButton_clicked()
         cap1.set(CV_CAP_PROP_FRAME_WIDTH, x1 );
         cap1.set(CV_CAP_PROP_FRAME_HEIGHT, y1 );
         cv::Mat frame1;
+        cv::Mat channel[3];
         do{
             cap1 >> frame1;
+            cv::split(frame1, channel);
+            if(ui->cam1B->isChecked() == true) {
+                channel[0]=cv::Mat::zeros(frame1.rows, frame1.cols, CV_8UC1); //BLUE!!!!!!
+            }
+            if(ui->cam1G->isChecked() == true) {
+                channel[1]=cv::Mat::zeros(frame1.rows, frame1.cols, CV_8UC1); //GREEN!!!!!!
+            }
+            if(ui->cam1R->isChecked() == true) {
+                channel[2]=cv::Mat::zeros(frame1.rows, frame1.cols, CV_8UC1); //RED!!!!!!
+            }
+            cv::merge(channel, 3, frame1);
             imshow(name1 ,frame1);
             //cap1.release();
         }while(cv::waitKey(30)<0);
@@ -126,7 +156,25 @@ void camerawindow::on_pushButton_2_clicked()
             IplImage *temp = cvCloneImage( frame2 );
             cvRemap( temp, frame2, mapx, mapy );
             cvReleaseImage( &temp );
-            cvShowImage( "Calibrated VidWindow 2", frame2 );
+
+            cv::Mat old;
+
+            cv::Mat channel[3];
+            cv::split(frame2, channel);
+            if(ui->cam2B->isChecked() == true) {
+                channel[0]=cv::Mat::zeros(frame2->height, frame2->width, CV_8UC1); //BLUE!!!!!!
+            }
+            if(ui->cam2G->isChecked() == true) {
+                channel[1]=cv::Mat::zeros(frame2->height, frame2->width, CV_8UC1); //GREEN!!!!!!
+            }
+            if(ui->cam2R->isChecked() == true) {
+                channel[2]=cv::Mat::zeros(frame2->height, frame2->width, CV_8UC1); //RED!!!!!!
+            }
+            cv::merge(channel, 3, old);
+            IplImage newer = old;
+            IplImage* new_image = &newer;
+
+            cvShowImage( "Calibrated VidWindow 2", new_image );
             int c = cvWaitKey( 15 );
             if( c == 'p' ){
                         c = 0;
@@ -148,15 +196,26 @@ void camerawindow::on_pushButton_2_clicked()
         cap2.set(CV_CAP_PROP_FRAME_WIDTH, x2 );
         cap2.set(CV_CAP_PROP_FRAME_HEIGHT, y2 );
         cv::Mat frame2;
+        cv::Mat channel[3];
         do{
             cap2 >> frame2;
+            cv::split(frame2, channel);
+            if(ui->cam2B->isChecked() == true) {
+                channel[0]=cv::Mat::zeros(frame2.rows, frame2.cols, CV_8UC1); //BLUE!!!!!!
+            }
+            if(ui->cam2G->isChecked() == true) {
+                channel[1]=cv::Mat::zeros(frame2.rows, frame2.cols, CV_8UC1); //GREEN!!!!!!
+            }
+            if(ui->cam2R->isChecked() == true) {
+                channel[2]=cv::Mat::zeros(frame2.rows, frame2.cols, CV_8UC1); //RED!!!!!!
+            }
+            cv::merge(channel, 3, frame2);
             imshow(name2 ,frame2);
-            //cap2.release();
+            //cap1.release();
         }while(cv::waitKey(30)<0);
         cv::destroyWindow(name2);
-    }
+        }
 }
-
 void camerawindow::on_pushButton_3_clicked()
 {
     QSettings settings("JoshCrawleySoft", "3D_Scanner");
@@ -192,7 +251,25 @@ void camerawindow::on_pushButton_3_clicked()
             IplImage *temp = cvCloneImage( frame3 );
             cvRemap( temp, frame3, mapx, mapy );
             cvReleaseImage( &temp );
-            cvShowImage( "Calibrated VidWindow 3", frame3 );
+
+            cv::Mat old;
+
+            cv::Mat channel[3];
+            cv::split(frame3, channel);
+            if(ui->cam3B->isChecked() == true) {
+                channel[0]=cv::Mat::zeros(frame3->height, frame3->width, CV_8UC1); //BLUE!!!!!!
+            }
+            if(ui->cam3G->isChecked() == true) {
+                channel[1]=cv::Mat::zeros(frame3->height, frame3->width, CV_8UC1); //GREEN!!!!!!
+            }
+            if(ui->cam3R->isChecked() == true) {
+                channel[2]=cv::Mat::zeros(frame3->height, frame3->width, CV_8UC1); //RED!!!!!!
+            }
+            cv::merge(channel, 3, old);
+            IplImage newer = old;
+            IplImage* new_image = &newer;
+
+            cvShowImage( "Calibrated VidWindow 3", new_image );
             int c = cvWaitKey( 15 );
             if( c == 'p' ){
                         c = 0;
@@ -207,21 +284,32 @@ void camerawindow::on_pushButton_3_clicked()
             frame3 = cvQueryFrame( capture );
 
         }
-
-        }
+    }
     else {
         cv::namedWindow(name3);
         cv::VideoCapture cap3 = cv::VideoCapture(vidDevice3);
         cap3.set(CV_CAP_PROP_FRAME_WIDTH, x3 );
         cap3.set(CV_CAP_PROP_FRAME_HEIGHT, y3 );
         cv::Mat frame3;
+        cv::Mat channel[3];
         do{
             cap3 >> frame3;
+            cv::split(frame3, channel);
+            if(ui->cam3B->isChecked() == true) {
+                channel[0]=cv::Mat::zeros(frame3.rows, frame3.cols, CV_8UC1); //BLUE!!!!!!
+            }
+            if(ui->cam3G->isChecked() == true) {
+                channel[1]=cv::Mat::zeros(frame3.rows, frame3.cols, CV_8UC1); //GREEN!!!!!!
+            }
+            if(ui->cam3R->isChecked() == true) {
+                channel[2]=cv::Mat::zeros(frame3.rows, frame3.cols, CV_8UC1); //RED!!!!!!
+            }
+            cv::merge(channel, 3, frame3);
             imshow(name3 ,frame3);
-            //cap3.release();
+            //cap1.release();
         }while(cv::waitKey(30)<0);
         cv::destroyWindow(name3);
-    }
+        }
 }
 
 void camerawindow::on_pushButton_4_clicked()
@@ -259,7 +347,25 @@ void camerawindow::on_pushButton_4_clicked()
             IplImage *temp = cvCloneImage( frame4 );
             cvRemap( temp, frame4, mapx, mapy );
             cvReleaseImage( &temp );
-            cvShowImage( "Calibrated VidWindow 4", frame4 );
+
+            cv::Mat old;
+
+            cv::Mat channel[3];
+            cv::split(frame4, channel);
+            if(ui->cam4B->isChecked() == true) {
+                channel[0]=cv::Mat::zeros(frame4->height, frame4->width, CV_8UC1); //BLUE!!!!!!
+            }
+            if(ui->cam4G->isChecked() == true) {
+                channel[1]=cv::Mat::zeros(frame4->height, frame4->width, CV_8UC1); //GREEN!!!!!!
+            }
+            if(ui->cam4R->isChecked() == true) {
+                channel[2]=cv::Mat::zeros(frame4->height, frame4->width, CV_8UC1); //RED!!!!!!
+            }
+            cv::merge(channel, 3, old);
+            IplImage newer = old;
+            IplImage* new_image = &newer;
+
+            cvShowImage( "Calibrated VidWindow 4", new_image );
             int c = cvWaitKey( 15 );
             if( c == 'p' ){
                         c = 0;
@@ -274,20 +380,32 @@ void camerawindow::on_pushButton_4_clicked()
             frame4 = cvQueryFrame( capture );
 
         }
-        }
+    }
     else {
         cv::namedWindow(name4);
         cv::VideoCapture cap4 = cv::VideoCapture(vidDevice4);
         cap4.set(CV_CAP_PROP_FRAME_WIDTH, x4 );
         cap4.set(CV_CAP_PROP_FRAME_HEIGHT, y4 );
         cv::Mat frame4;
+        cv::Mat channel[3];
         do{
             cap4 >> frame4;
+            cv::split(frame4, channel);
+            if(ui->cam4B->isChecked() == true) {
+                channel[0]=cv::Mat::zeros(frame4.rows, frame4.cols, CV_8UC1); //BLUE!!!!!!
+            }
+            if(ui->cam4G->isChecked() == true) {
+                channel[1]=cv::Mat::zeros(frame4.rows, frame4.cols, CV_8UC1); //GREEN!!!!!!
+            }
+            if(ui->cam4R->isChecked() == true) {
+                channel[2]=cv::Mat::zeros(frame4.rows, frame4.cols, CV_8UC1); //RED!!!!!!
+            }
+            cv::merge(channel, 3, frame4);
             imshow(name4 ,frame4);
-            //cap4.release();
+            //cap1.release();
         }while(cv::waitKey(30)<0);
         cv::destroyWindow(name4);
-    }
+        }
 }
 
 void camerawindow::on_pushButton_5_clicked()

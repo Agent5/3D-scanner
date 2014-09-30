@@ -101,7 +101,7 @@ public:
     QLabel *label_16;
     QLabel *label_17;
     QLabel *label_18;
-    QWidget *widget;
+    QWidget *layoutWidget1;
     QHBoxLayout *horizontalLayout;
     QPushButton *FileSave;
     QLineEdit *fileSaveLocation;
@@ -351,18 +351,18 @@ public:
 
         verticalLayout->addWidget(label_18);
 
-        widget = new QWidget(tab_2);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(50, 180, 581, 31));
-        horizontalLayout = new QHBoxLayout(widget);
+        layoutWidget1 = new QWidget(tab_2);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(50, 180, 581, 31));
+        horizontalLayout = new QHBoxLayout(layoutWidget1);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        FileSave = new QPushButton(widget);
+        FileSave = new QPushButton(layoutWidget1);
         FileSave->setObjectName(QStringLiteral("FileSave"));
 
         horizontalLayout->addWidget(FileSave);
 
-        fileSaveLocation = new QLineEdit(widget);
+        fileSaveLocation = new QLineEdit(layoutWidget1);
         fileSaveLocation->setObjectName(QStringLiteral("fileSaveLocation"));
 
         horizontalLayout->addWidget(fileSaveLocation);
@@ -414,6 +414,7 @@ public:
          << QApplication::translate("configwindow", "/dev/video3", 0)
         );
         label_3->setText(QApplication::translate("configwindow", "Video Device", 0));
+        vXAxis1->setPlaceholderText(QString());
         label_11->setText(QApplication::translate("configwindow", "X", 0));
         vStatus1->setText(QApplication::translate("configwindow", "Video Status", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab1), QApplication::translate("configwindow", "Vid Device 1", 0));
