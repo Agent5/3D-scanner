@@ -17,6 +17,8 @@ configwindow::configwindow(QWidget *parent) :
 
     ui->vXAxis1->setPlaceholderText( (settings.value("Video/vXAxis1").toString() ) );
     ui->vYAxis1->setPlaceholderText( (settings.value("Video/vYAxis1").toString() ) );
+    ui->centerX1->setPlaceholderText( (settings.value("Calibration/ellipseX1").toString() ));
+    ui->centerY1->setPlaceholderText( (settings.value("Calibration/ellipseY1").toString() ));
     QString a1 = (settings.value("Video/vDevice1" , "-1")).toString();
     int vidDevice1 = a1.right(1).toInt();
     if (a1.length() != 0) {
@@ -25,6 +27,8 @@ configwindow::configwindow(QWidget *parent) :
 
     ui->vXAxis2->setPlaceholderText( (settings.value("Video/vXAxis2").toString() ) );
     ui->vYAxis2->setPlaceholderText( (settings.value("Video/vYAxis2").toString() ) );
+    ui->centerX2->setPlaceholderText( (settings.value("Calibration/ellipseX2").toString() ));
+    ui->centerY2->setPlaceholderText( (settings.value("Calibration/ellipseY2").toString() ));
     QString a2 = (settings.value("Video/vDevice2" , "-1")).toString();
     int vidDevice2 = a2.right(1).toInt();
     if (a2.length() != 0) {
@@ -34,6 +38,8 @@ configwindow::configwindow(QWidget *parent) :
 
     ui->vXAxis3->setPlaceholderText( (settings.value("Video/vXAxis3").toString() ) );
     ui->vYAxis3->setPlaceholderText( (settings.value("Video/vYAxis3").toString() ) );
+    ui->centerX3->setPlaceholderText( (settings.value("Calibration/ellipseX3").toString() ));
+    ui->centerY3->setPlaceholderText( (settings.value("Calibration/ellipseY3").toString() ));
     QString a3 = (settings.value("Video/vDevice3" , "-1")).toString();
     int vidDevice3 = a3.right(1).toInt();
     if (a3.length() != 0) {
@@ -43,6 +49,8 @@ configwindow::configwindow(QWidget *parent) :
 
     ui->vXAxis4->setPlaceholderText( (settings.value("Video/vXAxis4").toString() ) );
     ui->vYAxis4->setPlaceholderText( (settings.value("Video/vYAxis4").toString() ) );
+    ui->centerX4->setPlaceholderText( (settings.value("Calibration/ellipseX4").toString() ));
+    ui->centerY4->setPlaceholderText( (settings.value("Calibration/ellipseY4").toString() ));
     QString a4 = (settings.value("Video/vDevice4" , "-1")).toString();
     int vidDevice4 = a4.right(1).toInt();
     if (a4.length() != 0) {
@@ -52,6 +60,8 @@ configwindow::configwindow(QWidget *parent) :
     ui->vURL->setPlaceholderText( (settings.value("Video/vURL").toString() ) );
     ui->vXAxis5->setPlaceholderText( (settings.value("Video/vXAxis5").toString() ) );
     ui->vYAxis5->setPlaceholderText( (settings.value("Video/vYAxis5").toString() ) );
+    ui->centerX5->setPlaceholderText( (settings.value("Calibration/ellipseX5").toString() ));
+    ui->centerY5->setPlaceholderText( (settings.value("Calibration/ellipseY5").toString() ));
 
 
     ui->fileSaveLocation->setPlaceholderText( settings.value("Calibration/fileStorage").toString() );
@@ -180,40 +190,6 @@ settings.endGroup();
 }
 
 
-
-
-//void configwindow::LoadSettings(void)
-//{
-//    QSettings settings("JoshCrawleySoft", "3D_Scanner");
-//    QString a1 = (settings.value("Video/vDevice1" , -1)).toString();
-//    int vidDevice1 = a1.right(1).toInt();
-//    ui->vXAxis1->text() = settings.value("Video/vXAxis1").toString();
-//    ui->vYAxis1->text() = settings.value("Video/vYAxis1").toString();
-//    ui->radioButton_2->setChecked(true);
-//    ui->vDevice1->setCurrentIndex(vidDevice1);
-//
-//    QString a2 = (settings.value("Video/vDevice2" , -1)).toString();
-//    int vidDevice2 = a2.right(1).toInt();
-//    ui->vXAxis2->text() = settings.value("Video/vXAxis2").toString();
-//    ui->vYAxis2->text() = settings.value("Video/vYAxis2").toString();
-//    ui->radioButton_4->setChecked(true);
-//    ui->vDevice2->setCurrentIndex(vidDevice2);
-//
-//    QString a3 = (settings.value("Video/vDevice3" , -1)).toString();
-//    int vidDevice3 = a3.right(1).toInt();
-//    ui->vXAxis3->text() = settings.value("Video/vXAxis3").toString();
-//    ui->vYAxis3->text() = settings.value("Video/vYAxis3").toString();
-//    ui->radioButton_6->setChecked(true);
-//    ui->vDevice3->setCurrentIndex(vidDevice3);
-//
-//    QString a4 = (settings.value("Video/vDevice4" , -1)).toString();
-//    int vidDevice4 = a4.right(1).toInt();
-//    ui->vXAxis4->text() = settings.value("Video/vXAxis4").toString();
-//    ui->vYAxis4->text() = settings.value("Video/vYAxis4").toString();
-//    ui->radioButton_14->setChecked(true);
-//    ui->vDevice4->setCurrentIndex(vidDevice4);
-//
-//};
 
 
 
@@ -354,3 +330,63 @@ void configwindow::on_FileSave_clicked()
 
 }
 
+
+void configwindow::on_centerX1_editingFinished()
+{
+    QString ellipse_center_x = ui->centerX1->text();
+    configwindow::SaveSettings( "Calibration", "ellipseX1", ellipse_center_x );
+}
+
+void configwindow::on_centerY1_editingFinished()
+{
+    QString ellipse_center_y = ui->centerY1->text();
+    configwindow::SaveSettings( "Calibration", "ellipseY1", ellipse_center_y );
+}
+
+void configwindow::on_centerX2_editingFinished()
+{
+    QString ellipse_center_x = ui->centerX2->text();
+    configwindow::SaveSettings( "Calibration", "ellipseX2", ellipse_center_x );
+}
+
+void configwindow::on_centerY2_editingFinished()
+{
+    QString ellipse_center_y = ui->centerY2->text();
+    configwindow::SaveSettings( "Calibration", "ellipseY2", ellipse_center_y );
+}
+
+void configwindow::on_centerX3_editingFinished()
+{
+    QString ellipse_center_x = ui->centerX3->text();
+    configwindow::SaveSettings( "Calibration", "ellipseX3", ellipse_center_x );
+}
+
+void configwindow::on_centerY3_editingFinished()
+{
+    QString ellipse_center_y = ui->centerY3->text();
+    configwindow::SaveSettings( "Calibration", "ellipseY3", ellipse_center_y );
+}
+
+void configwindow::on_centerX4_editingFinished()
+{
+    QString ellipse_center_x = ui->centerX4->text();
+    configwindow::SaveSettings( "Calibration", "ellipseX4", ellipse_center_x );
+}
+
+void configwindow::on_centerY4_editingFinished()
+{
+    QString ellipse_center_y = ui->centerY4->text();
+    configwindow::SaveSettings( "Calibration", "ellipseY4", ellipse_center_y );
+}
+
+void configwindow::on_centerX5_editingFinished()
+{
+    QString ellipse_center_x = ui->centerX5->text();
+    configwindow::SaveSettings( "Calibration", "ellipseX5", ellipse_center_x );
+}
+
+void configwindow::on_centerY5_editingFinished()
+{
+    QString ellipse_center_y = ui->centerY5->text();
+    configwindow::SaveSettings( "Calibration", "ellipseY5", ellipse_center_y );
+}

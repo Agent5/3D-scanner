@@ -5,17 +5,21 @@ Current - 29 September 2014
 
 QT program nearly functional for scanning!
 What is done?
+
 	GUI done.	
 	Basic configuration.
 	Camera lens calibration!
 	
 In the works (actively)?
+
 	Laser line detection
 	Ellipse detection (Yes, both of these will auto-calibrate the camera)
 	Scanner.
 	Algo's to increase accuracy and pointcloud generation.
 
 Slightly future Goals?
+
+	Implementation of PointCloud Library.
 	Implement more than flat text file for data saving. Looking at .OBJ
 
 

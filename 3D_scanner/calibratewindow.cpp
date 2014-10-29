@@ -4,6 +4,8 @@
 #include <QSettings>
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/opencv.hpp"
+
 #include <QMessageBox>
 #include <QDebug>
 
@@ -152,92 +154,108 @@ void calibratewindow::on_calibButton1_clicked()
     cvSave( intrinsicName, intrinsic_matrix );
     cvSave( distortionName, distortion_coeffs );
     cvDestroyWindow( "Calibration" );
-    //cvReleaseCapture(&capture);
-    //return;
-    //Normally ended here, but we now do line detection...
+
+
+
+
 
     QMessageBox msgBox;
     msgBox.setText("Lens Calibration done. Please remove checkerboard from scan.");
     msgBox.exec();
-    
+
+
+    cv::Mat intrinsic ;
+    cv::Mat distortion ;
+
+    qDebug() << intrinsicName << distortionName ;
+
+    cv::FileStorage fsIntrinsic(intrinsicName, cv::FileStorage::READ);
+    fsIntrinsic["Intrinsics1"] >> intrinsic;
+    cv::FileStorage fsDistortion(distortionName, cv::FileStorage::READ);
+    fsDistortion["Distortion1"] >> distortion;
+    fsIntrinsic.release();
+    fsDistortion.release();
+
+
+    cv::Mat mapx ;
+    cv::Mat mapy ;
+
+
     cv::Mat threshold_output, src_gray;
     std::vector<std::vector<cv::Point> > contours;
     std::vector<cv::Vec4i> hierarchy;
     int thresh = 100;
-    cv::namedWindow( "Contours", CV_WINDOW_AUTOSIZE );
-    cv::RNG rng(12345);
-
-    do{
-        cv::Mat src = cvQueryFrame( capture );
-        cv::cvtColor(src, src_gray, CV_BGR2GRAY);
-        
-        /// Detect edges using Threshold
-        cv::threshold( src_gray, threshold_output, thresh, 255, cv::THRESH_TOZERO );
-        /// Find contours
-        cv::findContours( threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_TC89_KCOS, cv::Point(0, 0) );
-
-        /// Find the rotated rectangles and ellipses for each contour
-        std::vector<cv::RotatedRect> minRect( contours.size() );
-        std::vector<cv::RotatedRect> minEllipse( contours.size() );
-        for( int i = 0; i < contours.size(); i++ )
-        { minRect[i] = minAreaRect( cv::Mat(contours[i]) );
-            if( contours[i].size() > 5 )
-            { minEllipse[i] = fitEllipse( cv::Mat(contours[i]) ); }
-        }
-        
-        /// Draw contours + rotated rects + ellipses
-        cv::Mat drawing = cv::Mat::zeros( threshold_output.size(), CV_8UC3 );
-        for( int i = 0; i< contours.size(); i++ )
-        {
-            cv::Scalar color = cv::Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-            // contour
-            cv::drawContours( drawing, contours, i, color, 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point() );
-            // ellipse
-            cv::ellipse( drawing, minEllipse[i], color, 2, 8 );
-            // rotated rectangle
-            cv::Point2f rect_points[4]; minRect[i].points( rect_points );
-            for( int j = 0; j < 4; j++ )
-                cv::line( drawing, rect_points[j], rect_points[(j+1)%4], color, 1, 8 );
-        }
-        cv::createTrackbar( "Circle threshhold:", "Contours", &thresh, 255 );
-        imshow( "Contours", drawing );
-    }while(cv::waitKey(30)<0);
-    cv::destroyWindow("Contours");
-    
-    
-
-    cv::namedWindow( "Detected Lines" );
-
-    cv::Mat dst, cdst;
-    cv::Mat src = cvQueryFrame( capture );
-    
+    cv::namedWindow( "Ellipse and Line Detection", CV_WINDOW_AUTOSIZE );
+    cv::Mat dst, canny_dst ;
     int canny_thresh_min = 0;
     int canny_thresh_max = 400;
+
+
     do{
-        src = cvQueryFrame( capture );
-        cv::blur(src, src, cv::Size(3,3));
-        cv::Canny(src, dst, canny_thresh_min, canny_thresh_max, 3);
-        cv::cvtColor(dst, cdst, CV_GRAY2BGR);
+        cv::Mat unmap_src = cvQueryFrame( capture );
+        cv::Mat src = unmap_src.clone() ;
+        cv::undistort(unmap_src, src, intrinsic, distortion);
 
-
+        cv::blur(src, dst, cv::Size(3,3));
+        cv::Canny(dst, canny_dst, canny_thresh_min, canny_thresh_max, 3);
         std::vector<cv::Vec4i> lines;
-        cv::HoughLinesP(dst, lines, 1, CV_PI/180, 50, 50, 10 );
-        for( size_t i = 0; i < lines.size(); i++ )
+        cv::HoughLinesP(canny_dst, lines, 1, CV_PI/180, 50, 50, 10 );
+
+        cv::cvtColor(src, src_gray, CV_BGR2GRAY);  // Copy source into a gray_source
+        cv::threshold( src_gray, threshold_output, thresh, 255, cv::THRESH_BINARY ); // Detect edges using Threshold
+        cv::findContours( threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_TC89_KCOS, cv::Point(0, 0) );
+        std::vector<cv::RotatedRect> minRect( contours.size() );
+
+        cv::Mat src_clone = src ;
+        cv::Scalar red_color = cv::Scalar(0,0,127,127);
+        cv::Scalar green_color = cv::Scalar(0,255,0,127);
+        double ellipse_x ;
+        double ellipse_y ;
+        for( int i = 0; i < contours.size(); i++ )
         {
-            cv::Vec4i l = lines[i];
-            line( cdst, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 3, CV_AA);
+            minRect[i] = minAreaRect( cv::Mat(contours[i]) );
+            if( contours[i].size() > 5 )
+            {
+                cv::drawContours( src_clone, contours, i, cv::Scalar(255,0,0), 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point() );
+                std::vector<cv::RotatedRect> minEllipse( contours.size() );
+                double area_of_contours = cv::contourArea(contours[i]);
+                cv::RotatedRect rectsize = fitEllipse( cv::Mat(contours[i]) );
+                double area_of_ellipse = 3.14159265359 * (rectsize.size.area() ) / 4;
+                double percent_error = fabs((area_of_ellipse - area_of_contours)/area_of_contours) * 100 ;
+                if (percent_error <  0.2 && area_of_ellipse > 1000){
+                    minEllipse[i] = fitEllipse( cv::Mat(contours[i]) );
+                    cv::ellipse( src_clone, minEllipse[i], red_color ,-1, 8 );
+                    for( size_t i = 0; i < lines.size(); i++ )
+                            {
+                                cv::Vec4i l = lines[i];
+                                if( l[0] < rectsize.center.x+rectsize.size.height/2 && l[0] > rectsize.center.x-rectsize.size.height/2 ){
+                                    if( l[1] < rectsize.center.y+rectsize.size.width/2 && l[1] > rectsize.center.y-rectsize.size.width/2 ){
+                                        if( l[2] < rectsize.center.x+rectsize.size.height/2 && l[2] > rectsize.center.x-rectsize.size.height/2 ){
+                                            if( l[3] < rectsize.center.y+rectsize.size.width/2 && l[3] > rectsize.center.y-rectsize.size.width/2 ){
+                                                line( src, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), green_color, 3, CV_AA);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                    qDebug() << "%error" << percent_error << rectsize.center.x << rectsize.center.y ;
+                    ellipse_x = rectsize.center.x;
+                    ellipse_y = rectsize.center.y;
+                }
+            }
         }
-        cv::imshow("Detected Lines", cdst);
-        cv::createTrackbar( "Canny threshhold:", "Detected Lines", &canny_thresh_min, canny_thresh_max );
-    } while(cv::waitKey(30)<0);
-    
-    
-    cv::destroyWindow("Detected Lines");
+        settings.beginGroup("Calibration");
+        settings.setValue("ellipseX1", ellipse_x);
+        settings.setValue("ellipseY1", ellipse_y);
+        settings.endGroup();
+
+        cv::createTrackbar( "Circle threshhold:", "Ellipse and Line Detection", &thresh, 255 );
+        imshow( "Ellipse and Line Detection", src_clone );
+    }while(cv::waitKey(30)<0);
+    cv::destroyWindow("Ellipse and Line Detection");
+
     cvReleaseCapture(&capture);
     return;
-
-
-
 }
 
 
@@ -376,34 +394,106 @@ void calibratewindow::on_calibButton2_clicked()
     cvSave( intrinsicName, intrinsic_matrix );
     cvSave( distortionName, distortion_coeffs );
     cvDestroyWindow( "Calibration" );
-    //cvReleaseCapture(&capture);
-    //return;
-    //Normally ended here, but we now do line detection...
+
+
+
 
 
     QMessageBox msgBox;
     msgBox.setText("Lens Calibration done. Please remove checkerboard from scan.");
     msgBox.exec();
 
-    cv::namedWindow( "Detected Lines" );
 
-    cv::Mat dst, cdst;
+    cv::Mat intrinsic ;
+    cv::Mat distortion ;
+
+    qDebug() << intrinsicName << distortionName ;
+
+    cv::FileStorage fsIntrinsic(intrinsicName, cv::FileStorage::READ);
+    fsIntrinsic["Intrinsics2"] >> intrinsic;
+    cv::FileStorage fsDistortion(distortionName, cv::FileStorage::READ);
+    fsDistortion["Distortion2"] >> distortion;
+    fsIntrinsic.release();
+    fsDistortion.release();
+
+
+    cv::Mat mapx ;
+    cv::Mat mapy ;
+
+
+    cv::Mat threshold_output, src_gray;
+    std::vector<std::vector<cv::Point> > contours;
+    std::vector<cv::Vec4i> hierarchy;
+    int thresh = 100;
+    cv::namedWindow( "Ellipse and Line Detection", CV_WINDOW_AUTOSIZE );
+    cv::Mat dst, canny_dst ;
+    int canny_thresh_min = 0;
+    int canny_thresh_max = 400;
+
 
     do{
-        cv::Mat src = cvQueryFrame( capture );
-        cv::Canny(src, dst, 50, 200, 3);
-        cv::cvtColor(dst, cdst, CV_GRAY2BGR);
+        cv::Mat unmap_src = cvQueryFrame( capture );
+        cv::Mat src = unmap_src.clone() ;
+        cv::undistort(unmap_src, src, intrinsic, distortion);
 
+        cv::blur(src, dst, cv::Size(3,3));
+        cv::Canny(dst, canny_dst, canny_thresh_min, canny_thresh_max, 3);
         std::vector<cv::Vec4i> lines;
-        cv::HoughLinesP(dst, lines, 1, CV_PI/180, 50, 50, 10 );
-        for( size_t i = 0; i < lines.size(); i++ )
+        cv::HoughLinesP(canny_dst, lines, 1, CV_PI/180, 50, 50, 10 );
+
+        cv::cvtColor(src, src_gray, CV_BGR2GRAY);  // Copy source into a gray_source
+        cv::threshold( src_gray, threshold_output, thresh, 255, cv::THRESH_BINARY ); // Detect edges using Threshold
+        cv::findContours( threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_TC89_KCOS, cv::Point(0, 0) );
+        std::vector<cv::RotatedRect> minRect( contours.size() );
+
+        cv::Mat src_clone = src ;
+        cv::Scalar red_color = cv::Scalar(0,0,127,127);
+        cv::Scalar green_color = cv::Scalar(0,255,0,127);
+        double ellipse_x ;
+        double ellipse_y ;
+        for( int i = 0; i < contours.size(); i++ )
         {
-            cv::Vec4i l = lines[i];
-            line( cdst, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 3, CV_AA);
+            minRect[i] = minAreaRect( cv::Mat(contours[i]) );
+            if( contours[i].size() > 5 )
+            {
+                cv::drawContours( src_clone, contours, i, cv::Scalar(255,0,0), 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point() );
+                std::vector<cv::RotatedRect> minEllipse( contours.size() );
+                double area_of_contours = cv::contourArea(contours[i]);
+                cv::RotatedRect rectsize = fitEllipse( cv::Mat(contours[i]) );
+                double area_of_ellipse = 3.14159265359 * (rectsize.size.area() ) / 4;
+                double percent_error = fabs((area_of_ellipse - area_of_contours)/area_of_contours) * 100 ;
+                if (percent_error <  0.2 && area_of_ellipse > 1000){
+                    minEllipse[i] = fitEllipse( cv::Mat(contours[i]) );
+                    cv::ellipse( src_clone, minEllipse[i], red_color ,-1, 8 );
+                    for( size_t i = 0; i < lines.size(); i++ )
+                            {
+                                cv::Vec4i l = lines[i];
+                                if( l[0] < rectsize.center.x+rectsize.size.height/2 && l[0] > rectsize.center.x-rectsize.size.height/2 ){
+                                    if( l[1] < rectsize.center.y+rectsize.size.width/2 && l[1] > rectsize.center.y-rectsize.size.width/2 ){
+                                        if( l[2] < rectsize.center.x+rectsize.size.height/2 && l[2] > rectsize.center.x-rectsize.size.height/2 ){
+                                            if( l[3] < rectsize.center.y+rectsize.size.width/2 && l[3] > rectsize.center.y-rectsize.size.width/2 ){
+                                                line( src, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), green_color, 3, CV_AA);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                    qDebug() << "%error" << percent_error << rectsize.center.x << rectsize.center.y ;
+                    ellipse_x = rectsize.center.x;
+                    ellipse_y = rectsize.center.y;
+                }
+            }
         }
-        cv::imshow("Detected Lines", cdst);
-    } while(cv::waitKey(30)<0);
-    cv::destroyWindow("Detected Lines");
+        settings.beginGroup("Calibration");
+        settings.setValue("ellipseX2", ellipse_x);
+        settings.setValue("ellipseY2", ellipse_y);
+        settings.endGroup();
+
+        cv::createTrackbar( "Circle threshhold:", "Ellipse and Line Detection", &thresh, 255 );
+        imshow( "Ellipse and Line Detection", src_clone );
+    }while(cv::waitKey(30)<0);
+    cv::destroyWindow("Ellipse and Line Detection");
+
     cvReleaseCapture(&capture);
     return;
 }
@@ -543,35 +633,109 @@ void calibratewindow::on_calibButton3_clicked()
     cvSave( intrinsicName, intrinsic_matrix );
     cvSave( distortionName, distortion_coeffs );
     cvDestroyWindow( "Calibration" );
-    //cvReleaseCapture(&capture);
-    //return;
-    //Normally ended here, but we now do line detection...
+
+
+
+
 
     QMessageBox msgBox;
     msgBox.setText("Lens Calibration done. Please remove checkerboard from scan.");
     msgBox.exec();
 
-    cv::namedWindow( "Detected Lines" );
 
-    cv::Mat dst, cdst;
+    cv::Mat intrinsic ;
+    cv::Mat distortion ;
+
+    qDebug() << intrinsicName << distortionName ;
+
+    cv::FileStorage fsIntrinsic(intrinsicName, cv::FileStorage::READ);
+    fsIntrinsic["Intrinsics3"] >> intrinsic;
+    cv::FileStorage fsDistortion(distortionName, cv::FileStorage::READ);
+    fsDistortion["Distortion3"] >> distortion;
+    fsIntrinsic.release();
+    fsDistortion.release();
+
+
+    cv::Mat mapx ;
+    cv::Mat mapy ;
+
+
+    cv::Mat threshold_output, src_gray;
+    std::vector<std::vector<cv::Point> > contours;
+    std::vector<cv::Vec4i> hierarchy;
+    int thresh = 100;
+    cv::namedWindow( "Ellipse and Line Detection", CV_WINDOW_AUTOSIZE );
+    cv::Mat dst, canny_dst ;
+    int canny_thresh_min = 0;
+    int canny_thresh_max = 400;
+
 
     do{
-        cv::Mat src = cvQueryFrame( capture );
-        cv::Canny(src, dst, 50, 200, 3);
-        cv::cvtColor(dst, cdst, CV_GRAY2BGR);
+        cv::Mat unmap_src = cvQueryFrame( capture );
+        cv::Mat src = unmap_src.clone() ;
+        cv::undistort(unmap_src, src, intrinsic, distortion);
 
+        cv::blur(src, dst, cv::Size(3,3));
+        cv::Canny(dst, canny_dst, canny_thresh_min, canny_thresh_max, 3);
         std::vector<cv::Vec4i> lines;
-        cv::HoughLinesP(dst, lines, 1, CV_PI/180, 50, 50, 10 );
-        for( size_t i = 0; i < lines.size(); i++ )
+        cv::HoughLinesP(canny_dst, lines, 1, CV_PI/180, 50, 50, 10 );
+
+        cv::cvtColor(src, src_gray, CV_BGR2GRAY);  // Copy source into a gray_source
+        cv::threshold( src_gray, threshold_output, thresh, 255, cv::THRESH_BINARY ); // Detect edges using Threshold
+        cv::findContours( threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_TC89_KCOS, cv::Point(0, 0) );
+        std::vector<cv::RotatedRect> minRect( contours.size() );
+
+        cv::Mat src_clone = src ;
+        cv::Scalar red_color = cv::Scalar(0,0,127,127);
+        cv::Scalar green_color = cv::Scalar(0,255,0,127);
+        double ellipse_x ;
+        double ellipse_y ;
+        for( int i = 0; i < contours.size(); i++ )
         {
-            cv::Vec4i l = lines[i];
-            line( cdst, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 3, CV_AA);
+            minRect[i] = minAreaRect( cv::Mat(contours[i]) );
+            if( contours[i].size() > 5 )
+            {
+                cv::drawContours( src_clone, contours, i, cv::Scalar(255,0,0), 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point() );
+                std::vector<cv::RotatedRect> minEllipse( contours.size() );
+                double area_of_contours = cv::contourArea(contours[i]);
+                cv::RotatedRect rectsize = fitEllipse( cv::Mat(contours[i]) );
+                double area_of_ellipse = 3.14159265359 * (rectsize.size.area() ) / 4;
+                double percent_error = fabs((area_of_ellipse - area_of_contours)/area_of_contours) * 100 ;
+                if (percent_error <  0.2 && area_of_ellipse > 1000){
+                    minEllipse[i] = fitEllipse( cv::Mat(contours[i]) );
+                    cv::ellipse( src_clone, minEllipse[i], red_color ,-1, 8 );
+                    for( size_t i = 0; i < lines.size(); i++ )
+                            {
+                                cv::Vec4i l = lines[i];
+                                if( l[0] < rectsize.center.x+rectsize.size.height/2 && l[0] > rectsize.center.x-rectsize.size.height/2 ){
+                                    if( l[1] < rectsize.center.y+rectsize.size.width/2 && l[1] > rectsize.center.y-rectsize.size.width/2 ){
+                                        if( l[2] < rectsize.center.x+rectsize.size.height/2 && l[2] > rectsize.center.x-rectsize.size.height/2 ){
+                                            if( l[3] < rectsize.center.y+rectsize.size.width/2 && l[3] > rectsize.center.y-rectsize.size.width/2 ){
+                                                line( src, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), green_color, 3, CV_AA);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                    qDebug() << "%error" << percent_error << rectsize.center.x << rectsize.center.y ;
+                    ellipse_x = rectsize.center.x;
+                    ellipse_y = rectsize.center.y;
+                }
+            }
         }
-        cv::imshow("Detected Lines", cdst);
-    } while(cv::waitKey(30)<0);
-    cv::destroyWindow("Detected Lines");
+        settings.beginGroup("Calibration");
+        settings.setValue("ellipseX3", ellipse_x);
+        settings.setValue("ellipseY3", ellipse_y);
+        settings.endGroup();
+
+        cv::createTrackbar( "Circle threshhold:", "Ellipse and Line Detection", &thresh, 255 );
+        imshow( "Ellipse and Line Detection", src_clone );
+    }while(cv::waitKey(30)<0);
+    cv::destroyWindow("Ellipse and Line Detection");
+
     cvReleaseCapture(&capture);
     return;
+
 }
 
 
@@ -710,66 +874,109 @@ void calibratewindow::on_calibButton4_clicked()
     cvSave( intrinsicName, intrinsic_matrix );
     cvSave( distortionName, distortion_coeffs );
     cvDestroyWindow( "Calibration" );
-    //cvReleaseCapture(&capture);
-    //return;
-    //Normally ended here, but we now do line detection...
+
+
+
+
 
     QMessageBox msgBox;
     msgBox.setText("Lens Calibration done. Please remove checkerboard from scan.");
     msgBox.exec();
 
-    cv::namedWindow( "Detected Lines" );
 
-    cv::Mat dst, cdst;
+    cv::Mat intrinsic ;
+    cv::Mat distortion ;
+
+    qDebug() << intrinsicName << distortionName ;
+
+    cv::FileStorage fsIntrinsic(intrinsicName, cv::FileStorage::READ);
+    fsIntrinsic["Intrinsics4"] >> intrinsic;
+    cv::FileStorage fsDistortion(distortionName, cv::FileStorage::READ);
+    fsDistortion["Distortion4"] >> distortion;
+    fsIntrinsic.release();
+    fsDistortion.release();
+
+
+    cv::Mat mapx ;
+    cv::Mat mapy ;
+
+
+    cv::Mat threshold_output, src_gray;
+    std::vector<std::vector<cv::Point> > contours;
+    std::vector<cv::Vec4i> hierarchy;
+    int thresh = 100;
+    cv::namedWindow( "Ellipse and Line Detection", CV_WINDOW_AUTOSIZE );
+    cv::Mat dst, canny_dst ;
+    int canny_thresh_min = 0;
+    int canny_thresh_max = 400;
+
 
     do{
-        cv::Mat src = cvQueryFrame( capture );
-        cv::Canny(src, dst, 50, 200, 3);
-        cv::cvtColor(dst, cdst, CV_GRAY2BGR);
+        cv::Mat unmap_src = cvQueryFrame( capture );
+        cv::Mat src = unmap_src.clone() ;
+        cv::undistort(unmap_src, src, intrinsic, distortion);
 
+        cv::blur(src, dst, cv::Size(3,3));
+        cv::Canny(dst, canny_dst, canny_thresh_min, canny_thresh_max, 3);
         std::vector<cv::Vec4i> lines;
-        cv::HoughLinesP(dst, lines, 1, CV_PI/180, 50, 50, 10 );
-        for( size_t i = 0; i < lines.size(); i++ )
+        cv::HoughLinesP(canny_dst, lines, 1, CV_PI/180, 50, 50, 10 );
+
+        cv::cvtColor(src, src_gray, CV_BGR2GRAY);  // Copy source into a gray_source
+        cv::threshold( src_gray, threshold_output, thresh, 255, cv::THRESH_BINARY ); // Detect edges using Threshold
+        cv::findContours( threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_TC89_KCOS, cv::Point(0, 0) );
+        std::vector<cv::RotatedRect> minRect( contours.size() );
+
+        cv::Mat src_clone = src ;
+        cv::Scalar red_color = cv::Scalar(0,0,127,127);
+        cv::Scalar green_color = cv::Scalar(0,255,0,127);
+        double ellipse_x ;
+        double ellipse_y ;
+        for( int i = 0; i < contours.size(); i++ )
         {
-            cv::Vec4i l = lines[i];
-            line( cdst, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 3, CV_AA);
+            minRect[i] = minAreaRect( cv::Mat(contours[i]) );
+            if( contours[i].size() > 5 )
+            {
+                cv::drawContours( src_clone, contours, i, cv::Scalar(255,0,0), 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point() );
+                std::vector<cv::RotatedRect> minEllipse( contours.size() );
+                double area_of_contours = cv::contourArea(contours[i]);
+                cv::RotatedRect rectsize = fitEllipse( cv::Mat(contours[i]) );
+                double area_of_ellipse = 3.14159265359 * (rectsize.size.area() ) / 4;
+                double percent_error = fabs((area_of_ellipse - area_of_contours)/area_of_contours) * 100 ;
+                if (percent_error <  0.2 && area_of_ellipse > 1000){
+                    minEllipse[i] = fitEllipse( cv::Mat(contours[i]) );
+                    cv::ellipse( src_clone, minEllipse[i], red_color ,-1, 8 );
+                    for( size_t i = 0; i < lines.size(); i++ )
+                            {
+                                cv::Vec4i l = lines[i];
+                                if( l[0] < rectsize.center.x+rectsize.size.height/2 && l[0] > rectsize.center.x-rectsize.size.height/2 ){
+                                    if( l[1] < rectsize.center.y+rectsize.size.width/2 && l[1] > rectsize.center.y-rectsize.size.width/2 ){
+                                        if( l[2] < rectsize.center.x+rectsize.size.height/2 && l[2] > rectsize.center.x-rectsize.size.height/2 ){
+                                            if( l[3] < rectsize.center.y+rectsize.size.width/2 && l[3] > rectsize.center.y-rectsize.size.width/2 ){
+                                                line( src, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), green_color, 3, CV_AA);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                    qDebug() << "%error" << percent_error << rectsize.center.x << rectsize.center.y ;
+                    ellipse_x = rectsize.center.x;
+                    ellipse_y = rectsize.center.y;
+                }
+            }
         }
-        cv::imshow("Detected Lines", cdst);
-    } while(cv::waitKey(30)<0);
-    cv::destroyWindow("Detected Lines");
+        settings.beginGroup("Calibration");
+        settings.setValue("ellipseX4", ellipse_x);
+        settings.setValue("ellipseY4", ellipse_y);
+        settings.endGroup();
+
+        cv::createTrackbar( "Circle threshhold:", "Ellipse and Line Detection", &thresh, 255 );
+        imshow( "Ellipse and Line Detection", src_clone );
+    }while(cv::waitKey(30)<0);
+    cv::destroyWindow("Ellipse and Line Detection");
+
     cvReleaseCapture(&capture);
     return;
 
-//    // Example of loading these matrices back in
-//    CvMat *intrinsic = (CvMat*)cvLoad( intrinsicName );
-//    CvMat *distortion = (CvMat*)cvLoad( distortionName );
-//
-//    // Build the undistort map that we will use for all subsequent frames
-//    IplImage* mapx = cvCreateImage( cvGetSize( image ), IPL_DEPTH_32F, 1 );
-//    IplImage* mapy = cvCreateImage( cvGetSize( image ), IPL_DEPTH_32F, 1 );
-//    cvInitUndistortMap( intrinsic, distortion, mapx, mapy );
-//
-//    // Run the camera to the screen, now showing the raw and undistorted image
-//    cvNamedWindow( "Undistort" );
-//
-//    while( image ){
-//        IplImage *t = cvCloneImage( image );
-//        cvRemap( t, image, mapx, mapy ); // undistort image
-//        cvReleaseImage( &t );
-//        cvShowImage( "Undistort", image ); // Show corrected image
-//
-//        // Handle pause/unpause and esc
-//        int c = cvWaitKey( 15 );
-//        if( c == 'p' ){
-//            c = 0;
-//            while( c != 'p' && c != 27 ){
-//                c = cvWaitKey( 250 );
-//            }
-//        }
-//        if( c == 27 )
-//            break;
-//        image = cvQueryFrame( capture );
-//    }
-//    return;
 }
+
 

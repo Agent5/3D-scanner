@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_configwindow_t {
-    QByteArrayData data[29];
-    char stringdata[758];
+    QByteArrayData data[39];
+    char stringdata[1038];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -57,7 +57,17 @@ QT_MOC_LITERAL(24, 625, 25),
 QT_MOC_LITERAL(25, 651, 25),
 QT_MOC_LITERAL(26, 677, 30),
 QT_MOC_LITERAL(27, 708, 29),
-QT_MOC_LITERAL(28, 738, 19)
+QT_MOC_LITERAL(28, 738, 19),
+QT_MOC_LITERAL(29, 758, 27),
+QT_MOC_LITERAL(30, 786, 27),
+QT_MOC_LITERAL(31, 814, 27),
+QT_MOC_LITERAL(32, 842, 27),
+QT_MOC_LITERAL(33, 870, 27),
+QT_MOC_LITERAL(34, 898, 27),
+QT_MOC_LITERAL(35, 926, 27),
+QT_MOC_LITERAL(36, 954, 27),
+QT_MOC_LITERAL(37, 982, 27),
+QT_MOC_LITERAL(38, 1010, 27)
     },
     "configwindow\0on_vDevice1_currentIndexChanged\0"
     "\0index\0on_vDevice2_currentIndexChanged\0"
@@ -83,7 +93,16 @@ QT_MOC_LITERAL(28, 738, 19)
     "on_sqSize_editingFinished\0"
     "on_numOfFrames_editingFinished\0"
     "on_frameDelay_editingFinished\0"
-    "on_FileSave_clicked"
+    "on_FileSave_clicked\0on_centerX1_editingFinished\0"
+    "on_centerY1_editingFinished\0"
+    "on_centerX2_editingFinished\0"
+    "on_centerY2_editingFinished\0"
+    "on_centerX3_editingFinished\0"
+    "on_centerY3_editingFinished\0"
+    "on_centerX4_editingFinished\0"
+    "on_centerY4_editingFinished\0"
+    "on_centerX5_editingFinished\0"
+    "on_centerY5_editingFinished"
 };
 #undef QT_MOC_LITERAL
 
@@ -93,7 +112,7 @@ static const uint qt_meta_data_configwindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      26,   14, // methods
+      36,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -101,32 +120,42 @@ static const uint qt_meta_data_configwindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,  144,    2, 0x08 /* Private */,
-       4,    1,  147,    2, 0x08 /* Private */,
-       5,    1,  150,    2, 0x08 /* Private */,
-       6,    1,  153,    2, 0x08 /* Private */,
-       7,    1,  156,    2, 0x08 /* Private */,
-       8,    1,  159,    2, 0x08 /* Private */,
-       9,    1,  162,    2, 0x08 /* Private */,
-      10,    1,  165,    2, 0x08 /* Private */,
-      11,    0,  168,    2, 0x08 /* Private */,
-      12,    0,  169,    2, 0x08 /* Private */,
-      13,    0,  170,    2, 0x08 /* Private */,
-      14,    0,  171,    2, 0x08 /* Private */,
-      15,    0,  172,    2, 0x08 /* Private */,
-      16,    0,  173,    2, 0x08 /* Private */,
-      17,    0,  174,    2, 0x08 /* Private */,
-      18,    0,  175,    2, 0x08 /* Private */,
-      19,    1,  176,    2, 0x08 /* Private */,
-      20,    0,  179,    2, 0x08 /* Private */,
-      21,    0,  180,    2, 0x08 /* Private */,
-      22,    0,  181,    2, 0x08 /* Private */,
-      23,    0,  182,    2, 0x08 /* Private */,
-      24,    0,  183,    2, 0x08 /* Private */,
-      25,    0,  184,    2, 0x08 /* Private */,
-      26,    0,  185,    2, 0x08 /* Private */,
-      27,    0,  186,    2, 0x08 /* Private */,
-      28,    0,  187,    2, 0x08 /* Private */,
+       1,    1,  194,    2, 0x08 /* Private */,
+       4,    1,  197,    2, 0x08 /* Private */,
+       5,    1,  200,    2, 0x08 /* Private */,
+       6,    1,  203,    2, 0x08 /* Private */,
+       7,    1,  206,    2, 0x08 /* Private */,
+       8,    1,  209,    2, 0x08 /* Private */,
+       9,    1,  212,    2, 0x08 /* Private */,
+      10,    1,  215,    2, 0x08 /* Private */,
+      11,    0,  218,    2, 0x08 /* Private */,
+      12,    0,  219,    2, 0x08 /* Private */,
+      13,    0,  220,    2, 0x08 /* Private */,
+      14,    0,  221,    2, 0x08 /* Private */,
+      15,    0,  222,    2, 0x08 /* Private */,
+      16,    0,  223,    2, 0x08 /* Private */,
+      17,    0,  224,    2, 0x08 /* Private */,
+      18,    0,  225,    2, 0x08 /* Private */,
+      19,    1,  226,    2, 0x08 /* Private */,
+      20,    0,  229,    2, 0x08 /* Private */,
+      21,    0,  230,    2, 0x08 /* Private */,
+      22,    0,  231,    2, 0x08 /* Private */,
+      23,    0,  232,    2, 0x08 /* Private */,
+      24,    0,  233,    2, 0x08 /* Private */,
+      25,    0,  234,    2, 0x08 /* Private */,
+      26,    0,  235,    2, 0x08 /* Private */,
+      27,    0,  236,    2, 0x08 /* Private */,
+      28,    0,  237,    2, 0x08 /* Private */,
+      29,    0,  238,    2, 0x08 /* Private */,
+      30,    0,  239,    2, 0x08 /* Private */,
+      31,    0,  240,    2, 0x08 /* Private */,
+      32,    0,  241,    2, 0x08 /* Private */,
+      33,    0,  242,    2, 0x08 /* Private */,
+      34,    0,  243,    2, 0x08 /* Private */,
+      35,    0,  244,    2, 0x08 /* Private */,
+      36,    0,  245,    2, 0x08 /* Private */,
+      37,    0,  246,    2, 0x08 /* Private */,
+      38,    0,  247,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -146,6 +175,16 @@ static const uint qt_meta_data_configwindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    3,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -190,6 +229,16 @@ void configwindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 23: _t->on_numOfFrames_editingFinished(); break;
         case 24: _t->on_frameDelay_editingFinished(); break;
         case 25: _t->on_FileSave_clicked(); break;
+        case 26: _t->on_centerX1_editingFinished(); break;
+        case 27: _t->on_centerY1_editingFinished(); break;
+        case 28: _t->on_centerX2_editingFinished(); break;
+        case 29: _t->on_centerY2_editingFinished(); break;
+        case 30: _t->on_centerX3_editingFinished(); break;
+        case 31: _t->on_centerY3_editingFinished(); break;
+        case 32: _t->on_centerX4_editingFinished(); break;
+        case 33: _t->on_centerY4_editingFinished(); break;
+        case 34: _t->on_centerX5_editingFinished(); break;
+        case 35: _t->on_centerY5_editingFinished(); break;
         default: ;
         }
     }
@@ -220,13 +269,13 @@ int configwindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 26)
+        if (_id < 36)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 26;
+        _id -= 36;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 26)
+        if (_id < 36)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 26;
+        _id -= 36;
     }
     return _id;
 }

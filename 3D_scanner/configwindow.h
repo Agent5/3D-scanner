@@ -72,6 +72,26 @@ private slots:
     void on_FileSave_clicked();
 
 
+    void on_centerX1_editingFinished();
+
+    void on_centerY1_editingFinished();
+
+    void on_centerX2_editingFinished();
+
+    void on_centerY2_editingFinished();
+
+    void on_centerX3_editingFinished();
+
+    void on_centerY3_editingFinished();
+
+    void on_centerX4_editingFinished();
+
+    void on_centerY4_editingFinished();
+
+    void on_centerX5_editingFinished();
+
+    void on_centerY5_editingFinished();
+
 private:
     Ui::configwindow *ui;
 //    void LoadSettings(void);
