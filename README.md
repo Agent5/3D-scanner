@@ -3,17 +3,19 @@
 29 October 2014
 
 -Done-
-Calibration is nearing completion!
-Camera calibration is now applied across all relevant screens.
-Ellipse detection has low error.
-More settings added appropriately to override my detected answers. We don't want the computer to be too smart...
+	
+	Calibration is nearing completion!
+	Camera calibration is now applied across all relevant screens.
+	Ellipse detection has low error.
+	More settings added appropriately to override my detected answers. We don't want the computer to be too smart...
 
 -Working on now-
-Makefile is broken, badly. Was brought to my atention. Will collaborate to fix quick.
-Determining how to do accurate line detection. I have a few methods. 
-Thinking how to present scanner GUI for users.
-Re-writing Arduino to work better and more GCode-like. Will work with QT program to make ideal config.
-Simplyifying GUI so it works on little configuration, and catches errors. Easier for end-user, the better.
+	
+	Makefile is broken, badly. Was brought to my atention. Will collaborate to fix quick.
+	Determining how to do accurate line detection. I have a few methods. 
+	Thinking how to present scanner GUI for users.
+	Re-writing Arduino to work better and more GCode-like. Will work with QT program to make ideal config.
+	Simplyifying GUI so it works on little configuration, and catches errors. Easier for end-user, the better.
 
 
 
