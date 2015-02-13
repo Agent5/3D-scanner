@@ -1,4 +1,17 @@
 3D-scanner
+
+13 February 2015
+-Done-
+
+	GCode-like interpreter DONE for Arduino. The code AND the readme are in /scanner_bed
+	Finalizing QT program config, as Arduino code is done.
+
+-Working on now-
+
+	Working with QT and OpenGL for 3d rendering of said pointcloud. OpenGL confuses me. More learning experience.
+	Makefile still borked. 
+
+
 ==========
 29 October 2014
 
