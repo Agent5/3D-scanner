@@ -7,6 +7,7 @@
 #include <QtCore>
 #include <QFuture>
 #include <QtConcurrent>
+#include <iostream>
 
 #define M_PI 3.14159265358979323846
 
@@ -412,100 +413,100 @@ void camerawindow::on_pushButton_4_clicked()
 
 void camerawindow::on_pushButton_5_clicked()
 {
-//    std::string name5 = "Video5";
-//    cv::namedWindow(name5);
-//    QSettings settings("JoshCrawleySoft", "3D_Scanner");
-//    QString videoStreamAddress = settings.value("Video/vURL").toString();
-//    const std::string vSA_pre = videoStreamAddress.toUtf8().constData();
-//    char vSA [50] = videoStreamAddress.toUtf8() ;
-//    int x5 = settings.value("Video/vXAxis5").toInt(); //Obvious X is X
-//    int y5 = settings.value("Video/vYAxis5").toInt(); //Obvious Y is Y
-//    if( ui->calib5->isChecked() == true){
+    std::string name5 = "Video5";
+    cv::namedWindow(name5);
+    QSettings settings("JoshCrawleySoft", "3D_Scanner");
+    QString videoStreamAddress = settings.value("Video/vURL").toString();
+    std::string vSA = videoStreamAddress.toStdString();
+    int x5 = settings.value("Video/vXAxis5").toInt(); //Obvious X is X
+    int y5 = settings.value("Video/vYAxis5").toInt(); //Obvious Y is Y
+    if( ui->calib5->isChecked() == true){
 
-//        cvNamedWindow("Calibrated VidWindow 5");
-//        QString iFile = settings.value("Calibration/fileStorage").toString() + "/Intrinsics5.xml";
-//        QString dFile = settings.value("Calibration/fileStorage").toString() + "/Distortion5.xml";
-//        QByteArray iname = iFile.toLocal8Bit();
-//        QByteArray dname = dFile.toLocal8Bit();
-//        const char *intrinsicName = iname.data();
-//        const char *distortionName = dname.data();
-//        CvMat *intrinsic = (CvMat*)cvLoad( intrinsicName );
-//        CvMat *distortion = (CvMat*)cvLoad( distortionName ); //Above sets up standard variables for this section
+        cvNamedWindow("Calibrated VidWindow 5");
+        QString iFile = settings.value("Calibration/fileStorage").toString() + "/Intrinsics5.xml";
+        QString dFile = settings.value("Calibration/fileStorage").toString() + "/Distortion5.xml";
+        QByteArray iname = iFile.toLocal8Bit();
+        QByteArray dname = dFile.toLocal8Bit();
+        const char *intrinsicName = iname.data();
+        const char *distortionName = dname.data();
+        CvMat *intrinsic = (CvMat*)cvLoad( intrinsicName );
+        CvMat *distortion = (CvMat*)cvLoad( distortionName ); //Above sets up standard variables for this section
 
-//        CvCapture* capture = cvCreateCameraCapture( vSA );
-//        assert( capture != NULL );
-//        cvSetCaptureProperty( capture, CV_CAP_PROP_FRAME_WIDTH, x5 );
-//        cvSetCaptureProperty( capture, CV_CAP_PROP_FRAME_HEIGHT, y5 );
+        CvCapture* capture = cvCaptureFromFile( videoStreamAddress.toStdString().c_str() );
+        cv::waitKey(30);
+        //assert( capture != NULL );
+        cvSetCaptureProperty( capture, CV_CAP_PROP_FRAME_WIDTH, x5 );
+        cvSetCaptureProperty( capture, CV_CAP_PROP_FRAME_HEIGHT, y5 );
 
-//        IplImage *frame5 = cvQueryFrame( capture );
+        IplImage *frame5 = cvQueryFrame( capture );
 
-//        IplImage* mapx = cvCreateImage( cvGetSize( frame5 ), IPL_DEPTH_32F, 1 ); //Calculate transients X
-//        IplImage* mapy = cvCreateImage( cvGetSize( frame5 ), IPL_DEPTH_32F, 1 ); //Calculate transients Y
-//        cvInitUndistortMap( intrinsic, distortion, mapx, mapy ); //precomputes calib matrix
+        IplImage* mapx = cvCreateImage( cvGetSize( frame5 ), IPL_DEPTH_32F, 1 ); //Calculate transients X
+        IplImage* mapy = cvCreateImage( cvGetSize( frame5 ), IPL_DEPTH_32F, 1 ); //Calculate transients Y
+        cvInitUndistortMap( intrinsic, distortion, mapx, mapy ); //precomputes calib matrix
 
-//        while ( frame5 ) {
-//            IplImage *temp = cvCloneImage( frame5 );
-//            cvRemap( temp, frame5, mapx, mapy );
-//            cvReleaseImage( &temp );
+        while ( frame5 ) {
+            IplImage *temp = cvCloneImage( frame5 );
+            cvRemap( temp, frame5, mapx, mapy );
+            cvReleaseImage( &temp );
 
-//            cv::Mat old;
+            cv::Mat old;
 
-//            cv::Mat channel[3];
-//            cv::split(frame5, channel);
-//            if(ui->cam5B->isChecked() == true) {
-//                channel[0]=cv::Mat::zeros(frame5->height, frame5->width, CV_8UC1); //BLUE!!!!!!
-//            }
-//            if(ui->cam5G->isChecked() == true) {
-//                channel[1]=cv::Mat::zeros(frame5->height, frame5->width, CV_8UC1); //GREEN!!!!!!
-//            }
-//            if(ui->cam5R->isChecked() == true) {
-//                channel[2]=cv::Mat::zeros(frame5->height, frame5->width, CV_8UC1); //RED!!!!!!
-//            }
-//            cv::merge(channel, 3, old);
-//            IplImage newer = old;
-//            IplImage* new_image = &newer;
+            cv::Mat channel[3];
+            cv::split(frame5, channel);
+            if(ui->cam5B->isChecked() == true) {
+                channel[0]=cv::Mat::zeros(frame5->height, frame5->width, CV_8UC1); //BLUE!!!!!!
+            }
+            if(ui->cam5G->isChecked() == true) {
+                channel[1]=cv::Mat::zeros(frame5->height, frame5->width, CV_8UC1); //GREEN!!!!!!
+            }
+            if(ui->cam5R->isChecked() == true) {
+                channel[2]=cv::Mat::zeros(frame5->height, frame5->width, CV_8UC1); //RED!!!!!!
+            }
+            cv::merge(channel, 3, old);
+            IplImage newer = old;
+            IplImage* new_image = &newer;
 
-//            cvShowImage( "Calibrated VidWindow 5", new_image );
-//            int c = cvWaitKey( 15 );
-//            if( c == 'p' ){
-//                        c = 0;
-//                        while( c != 'p' && c != 27 ){
-//                            c = cvWaitKey( 250 );
-//                        }
-//                    }
-//                    if( c == 27 ){
-//                        cvDestroyWindow("Calibrated VidWindow 5");
-//                        cvReleaseCapture(&capture);
-//                        break;}
-//            frame5 = cvQueryFrame( capture );
+            cvShowImage( "Calibrated VidWindow 5", new_image );
+            int c = cvWaitKey( 15 );
+            if( c == 'p' ){
+                        c = 0;
+                        while( c != 'p' && c != 27 ){
+                            c = cvWaitKey( 250 );
+                        }
+                    }
+                    if( c == 27 ){
+                        cvDestroyWindow("Calibrated VidWindow 5");
+                        cvReleaseCapture(&capture);
+                        break;}
+            frame5 = cvQueryFrame( capture );
 
-//        }
-//    }
-//    else {
-//        cv::namedWindow(name5);
-//        cv::VideoCapture cap5 = cv::VideoCapture(vSA);
-//        cap5.set(CV_CAP_PROP_FRAME_WIDTH, x5 );
-//        cap5.set(CV_CAP_PROP_FRAME_HEIGHT, y5 );
-//        cv::Mat frame5;
-//        cv::Mat channel[3];
-//        do{
-//            cap5 >> frame5;
-//            cv::split(frame5, channel);
-//            if(ui->cam5B->isChecked() == true) {
-//                channel[0]=cv::Mat::zeros(frame5.rows, frame5.cols, CV_8UC1); //BLUE!!!!!!
-//            }
-//            if(ui->cam5G->isChecked() == true) {
-//                channel[1]=cv::Mat::zeros(frame5.rows, frame5.cols, CV_8UC1); //GREEN!!!!!!
-//            }
-//            if(ui->cam5R->isChecked() == true) {
-//                channel[2]=cv::Mat::zeros(frame5.rows, frame5.cols, CV_8UC1); //RED!!!!!!
-//            }
-//            cv::merge(channel, 3, frame5);
-//            imshow(name5 ,frame5);
-//            //cap1.release();
-//        }while(cv::waitKey(30)<0);
-//        cv::destroyWindow(name5);
-//        }
+        }
+    }
+    else {
+        cv::namedWindow(name5);
+        cv::VideoCapture cap5 = cv::VideoCapture(vSA);
+        cap5.set(CV_CAP_PROP_FRAME_WIDTH, x5 );
+        cap5.set(CV_CAP_PROP_FRAME_HEIGHT, y5 );
+        cv::Mat frame5;
+        cv::Mat channel[3];
+        do{
+            cap5 >> frame5;
+            cv::split(frame5, channel);
+            if(ui->cam5B->isChecked() == true) {
+                channel[0]=cv::Mat::zeros(frame5.rows, frame5.cols, CV_8UC1); //BLUE!!!!!!
+            }
+            if(ui->cam5G->isChecked() == true) {
+                channel[1]=cv::Mat::zeros(frame5.rows, frame5.cols, CV_8UC1); //GREEN!!!!!!
+            }
+            if(ui->cam5R->isChecked() == true) {
+                channel[2]=cv::Mat::zeros(frame5.rows, frame5.cols, CV_8UC1); //RED!!!!!!
+            }
+            cv::merge(channel, 3, frame5);
+            imshow(name5 ,frame5);
+            //cap1.release();
+        }while(cv::waitKey(30)<0);
+        cv::destroyWindow(name5);
+        }
 
 }
 

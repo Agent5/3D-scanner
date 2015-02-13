@@ -1,0 +1,92 @@
+The scanner bed software is the Arduino solution for the 3D scanner I am making. Its basis is that of a semi-Gcode interpreter. I wanted something a user (or program) could type commands into, and have the platform follow them. GCode is the preferred way, as it's human readable and just works.
+
+My implementation is slightly different than GCode. This document will show users how to interface this Arduino sketch into their own 3D scanning project.
+
+An instruction is split into 3 parts.
+Command  Value  .(or)?
+
+You control this by issuing a command, and its appropriate value. If you're assigning the value, then you use a period. If you are asking the Arduino what value you previously set is, you just use the command and the "?" .
+
+
+**************************************************************
+The commands:
+
+M-commands set variables or allow you read the set variables. 
+
+M1  : Creates stepper device. The value is the gearing of the stepper you use. I assume you are using pins 7,8,9,10. M1? outputs the value you previously set.
+
+M2  : Sets the speed of the stepper, via the .setSpeed() call on the stepper device. M2? gives the previously set value.
+
+M3  : This number is the amount of steps to rotate the final scanning platform. For example, I'm using a gear belt to move the platform. The amount of steps my motor has to rotate to give 1 full revolution of the big platform is 15360. Yours will be different. M3? gives the previously set value.
+
+M4  : This number is a positive integer that represents how many subdivisions to break the circle into. For example, if you run "M4 180." , you will get 2 degree subdivisions ( as 360/180 = 2). I chose to do this to avoid floats on the input. 
+
+      The ? does something different. In this case, if you give a "M4?" , you will get 3 different numbers. The first is the number you initially gave M4. The second number is how many degrees is a 'slice' as a float to 6 decimals. The third number is how many steps will be passed directly to the .step() .
+
+
+G-commands do motion. G-commands don't have a ? operation. 
+
+G0  : The value you pass makes the motor go that many steps in a positive direction. 
+
+G1  : The value you pass makes the motor go that many steps in a negative direction.
+
+G2  : This makes the motor go the amount of steps that would equal a subdivision from the value you set in M4. For example, if you set M3 as 1000 and M4 as 4, you would get 250 steps for a "G2 1." command. The formula is (G2 value)*(M3 value)/(M4 value)  .
+
+G3  : This does what G2 does, but in the opposite direction.
+
+
+L-commands work with the laser(s).
+
+L0  : You can either turn on or off the laser. 0 turns it off, and 1 turns it on. A ? reports the current on status. The defualt Arduino pin for this is 11.
+
+L1  : You can either turn on or off the laser. 0 turns it off, and 1 turns it on. A ? reports the current on status. The defualt Arduino pin for this is 12.
+
+
+Miscellaneous commands.
+
+POS  : This command simply gives you the steps away from the initial starting position. 
+
+RESET  : Sends the platter back to wherever the initial starting position is.
+
+ZERO  : This is for the case where you want to start wherever you're currently at and treat it as the new starting position. This also means that RESET will send the platter back to this new position.
+
+**************************************************************
+
+Example code. Open up the Arduino serial port at 9600 baud. The commands I type, and the responses in parenthesis are beneath it.
+
+M1 48.          [creates a stepper motor of 48 steps/rotation on pins 7,8,9,10]
+(OK)
+M2 192.         [sets speed of stepper to 192]
+(OK)
+M3 15360.       [sets platter full rotation to 15360 steps]
+(OK)
+M4 360.         [sets dividing the circle in to 360 pieces, or 1 deg per slice]
+(OK)
+M4?             [query the settings on M4]
+(360 1.00000 42)
+POS.            [queries position]
+(0)
+L0 1.           [turns on first laser]
+(OK)
+G0 1000.        [1000 steps in positive direction]
+(OK)
+G1 400.         [400 steps in negative direction]
+(OK)
+POS.
+(600)
+G2 3.           [We passed 3, so it's 42 steps * 3, or 126 steps. It is also 3 degrees]
+(OK)
+POS.
+(726)
+ZERO.           [Does nothing to motors. Just treats this position as 0.]
+(OK)
+POS.
+(0)
+M2 3000.        [3000 steps in a negative direction]
+(OK)
+POS.
+(-3000)
+RESET.          [Platter moves back to where 0 is]
+(OK)
+POS.
+(OK)

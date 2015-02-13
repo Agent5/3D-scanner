@@ -14,21 +14,24 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     configwindow.cpp \
     camerawindow.cpp \
-    calibratewindow.cpp
+    calibratewindow.cpp \
+    mainwindow.cpp \
+    scanwindow.cpp
 
 HEADERS  += mainwindow.h \
     settings.h \
     configwindow.h \
     camerawindow.h \
-    calibratewindow.h
+    calibratewindow.h \
+    scanwindow.h
 
 FORMS    += mainwindow.ui \
     configwindow.ui \
     camerawindow.ui \
-    calibratewindow.ui
+    calibratewindow.ui \
+    scanwindow.ui
 
 INCLUDEPATH += /home/josh/OpenCV/opencv/include/opencv/
 LIBS += -L/usr/local/lib

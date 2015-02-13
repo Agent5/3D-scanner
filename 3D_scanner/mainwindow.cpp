@@ -3,6 +3,7 @@
 #include "configwindow.h"
 #include "camerawindow.h"
 #include "calibratewindow.h"
+#include "scanwindow.h"
 #include <cv.h>
 #include <highgui.h>
 
@@ -47,5 +48,9 @@ void MainWindow::on_calibrateButton_clicked()
     calibrate.exec();
 }
 
-
-
+void MainWindow::on_scanButton_clicked()
+{
+    scanwindow scan;
+    scan.setModal(true);
+    scan.exec();
+}
